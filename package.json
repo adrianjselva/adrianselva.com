@@ -1,0 +1,29 @@
+{
+  "name": "aselva.org",
+  "version": "1.0.0",
+  "description": "Personal portfolio webite",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adrianjselva/aselva.org.git"
+  },
+  "author": "Adrian Selva",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adrianjselva/aselva.org/issues"
+  },
+  "homepage": "https://github.com/adrianjselva/aselva.org#readme",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "next": "^9.4.0",
+    "react": "^16.13.1",
+    "react-bootstrap": "^1.0.1",
+    "react-dom": "^16.13.1",
+    "react-ga": "^2.7.0"
+  }
+}
