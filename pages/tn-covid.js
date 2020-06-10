@@ -324,6 +324,16 @@ class TNCovid extends React.Component {
               </Card.Body>
             </Card>
             </Row>
+            <Row className="mt-5 justify-content-center">
+              <Col>
+                <Row className="justify-content-center">
+                  {"Source:"}<a href="https://www.tn.gov/health/cedep/ncov.html"> Tennessee Department of Health</a>
+                </Row>
+                <Row className="justify-content-center">
+                  {"Last updated: June 10, 2020"}
+                </Row>
+              </Col>
+            </Row>
           </Col>
           </Row>
         </Container>
