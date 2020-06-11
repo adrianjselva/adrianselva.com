@@ -7,6 +7,7 @@ export default class extends React.Component {
     render() {
         return (
             <Layout title="Home">
+              <div style = {{height:"100vh"}}> </div>
             </Layout>
         )
     }
