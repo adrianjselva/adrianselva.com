@@ -13,6 +13,7 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
 import CountyScroll from '../components/county_scroll'
 import Tabs from 'react-bootstrap/Tabs'
+import Spinner from 'react-bootstrap/Spinner'
 
 import CountyData from '../assets/counties.json'
 import MapData from '../assets/maps.json'
@@ -20,25 +21,35 @@ import GeoJSON from '../assets/county_geojson.json'
 
 const PLOT_COMPONENT = {
   plotly: dynamic(import('../components/plot'), {
-      ssr: false
+      ssr: false,
+      loading: () => {
+        return(
+        <div className="justify-content-center">
+          <Spinner animation="border" role="status">
+            <span className="sr-only">Loading...</span>
+          </Spinner>
+        </div>
+      )
+      }
   })
-}
+};
 
-const DynamicPlot = PLOT_COMPONENT.plotly
+const DynamicPlot = PLOT_COMPONENT.plotly;
 
 class TNCovid extends React.Component {
 
   constructor(props) {
     super(props)
 
+    console.log(MapData)
+
     this.state = {
       type: 'active_cases',
       county: '',
       data: null,
       layout: null,
-      map_type: 'daily_cases_map',
-      map_data: this.plotObject(MapData['daily_cases_map']).data,
-      map_layout: this.plotObject(MapData['daily_cases_map']).layout,
+      map_data: this.plotObject(MapData['active_cases']).data,
+      map_layout: this.plotObject(MapData['active_cases']).layout,
       menu: {
         active: 'active_cases',
         total: 'total_cases',
@@ -63,7 +74,7 @@ class TNCovid extends React.Component {
     } else if(obj.type == "testing") {
       return this.testPlot(obj.xval, obj.totalTestVal, obj.positiveVals, obj.percentPositive, obj.gtitle)
     } else if(obj.type == "map") {
-      return this.countyMap(obj.fips, obj.z)
+      return this.countyMap(obj.counties, obj.z, obj.mtitle, obj.hovtext, obj.col1, obj.col2, obj.col3, obj.col4, obj.col5)
     } else {
       return {
         data: {},
@@ -214,15 +225,16 @@ class TNCovid extends React.Component {
       return;
     }
 
-    let cData = CountyData[this.state.county][type]
+    let cData = CountyData[this.state.county][type];
     let gObj = this.plotObject(cData);
+
+    let mData =
 
     this.setState({
       type: type,
       county: this.state.county,
       data: gObj.data,
       layout: gObj.layout,
-      map_type: this.state.map_type,
       map_data: this.state.map_data,
       map_layout: this.state.map_layout,
       menu: {
@@ -244,7 +256,6 @@ class TNCovid extends React.Component {
       county: county,
       data: gObj.data,
       layout: gObj.layout,
-      map_type: this.state.map_type,
       map_data: this.state.map_data,
       map_layout: this.state.map_layout,
       menu: {
@@ -271,7 +282,6 @@ class TNCovid extends React.Component {
         county: this.state.county,
         data: this.state.data,
         layout: this.state.layout,
-        map_type: this.state.map_type,
         map_data: this.state.map_data,
         map_layout: this.state.map_layout,
         menu: {
@@ -286,26 +296,40 @@ class TNCovid extends React.Component {
     }
   }
 
-  countyMap(fips, z) {
+  countyMap(counties, z, mtitle, hovtext, col1, col2, col3, col4, col5) {
+    let hov_temp = '<br>' + hovtext + ' %{z}<extra></extra>'
+
     let data = [{
       type: "choroplethmapbox",
       geojson: GeoJSON,
-      locations: fips,
+      locations: counties,
       z: z,
-      featureidkey: "properties.FIPS",
-      colorscale: 'Viridis'
+      featureidkey: "properties.NAME",
+      colorscale: [
+        ['0.0', col1],
+        ['0.25', col2],
+        ['0.5', col3],
+        ['0.75', col4],
+        ['1.0', col5]
+      ],
+      hovertemplate:
+        '<b>%{location}</b>' +
+        hov_temp,
+      marker: {
+         opacity: 0.75
+       }
     }];
 
     let layout = {
       mapbox: {
-        style: "carto-positron",
-        zoom: 5,
+        style: "light",
+        zoom: 5.35,
         center: {
           lat: 35.51,
           lon: -86
         }
       },
-      title: "Daily Confirmed COVID-19 Cases"
+      title: mtitle,
     }
 
     return {
@@ -316,14 +340,16 @@ class TNCovid extends React.Component {
 
   updateMenu(cat, type) {
     if(this.state.county == '') {
+      let mData = MapData[type];
+      let mObj = this.plotObject(mData);
+
       let s = {
         type: type,
         county: this.state.county,
         data: this.state.data,
         layout: this.state.layout,
-        map_type: this.state.map_type,
-        map_data: this.state.map_data,
-        map_layout: this.state.map_layout,
+        map_data: mObj.data,
+        map_layout: mObj.layout,
         menu: {
           active: this.state.menu.active,
           total: this.state.menu.total,
@@ -335,8 +361,11 @@ class TNCovid extends React.Component {
       s.menu[cat] = type;
       this.setState(s);
     } else {
-      let cData = CountyData[this.state.county][type]
+      let cData = CountyData[this.state.county][type];
       let gObj = this.plotObject(cData);
+
+      let mData = MapData[type];
+      let mObj = this.plotObject(mData);
 
 
       let s = {
@@ -344,9 +373,8 @@ class TNCovid extends React.Component {
         county: this.state.county,
         data: gObj.data,
         layout: gObj.layout,
-        map_type: this.state.map_type,
-        map_data: this.state.map_data,
-        map_layout: this.state.map_layout,
+        map_data: mObj.data,
+        map_layout: mObj.layout,
         menu: {
           active: this.state.menu.active,
           total: this.state.menu.total,
@@ -357,7 +385,6 @@ class TNCovid extends React.Component {
 
       s.menu[cat] = type;
       this.setState(s);
-      console.log(s);
     }
   }
 
@@ -429,7 +456,7 @@ class TNCovid extends React.Component {
                 <Card.Header>County Map</Card.Header>
                 <Card.Body>
                 <div className="mb-4">
-                  <CountyScroll title={this.countySelectorTitle()} func={this.updateCounty.bind(this)} />
+                  <DynamicPlot data={this.state.map_data} layout={this.state.map_layout} onClick={(obj) => {this.updateCounty(obj.points[0].properties.NAME)}}/>
                 </div>
                 </Card.Body>
               </Card>
@@ -439,7 +466,7 @@ class TNCovid extends React.Component {
             <Card>
               <Card.Header>Visualization</Card.Header>
               <Card.Body>
-                <DynamicPlot data={this.state.data} layout={this.state.layout}/>
+                <DynamicPlot data={this.state.data} layout={this.state.layout} onClick={() => {}}/>
               </Card.Body>
             </Card>
             </Row>
@@ -462,21 +489,5 @@ class TNCovid extends React.Component {
     )
   }
 }
-
-// <Tab.Container id="graph-selection" defaultActiveKey="total_cases">
-//   <ListGroup>
-//     <ListGroup.Item action onClick={() => this.menuClick("total_cases")} eventKey="total_cases">Total Cases</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("daily_cases")} eventKey="daily_cases">Daily Cases</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("total_deaths")} eventKey="total_deaths">Total Deaths</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("daily_deaths")} eventKey="daily_deaths">Daily Deaths</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("testing")} eventKey="testing">Testing Data</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("active_cases")} eventKey="active_cases">Active Cases</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("daily_active")} eventKey="daily_active">Daily Active Cases</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("total_recoveries")} eventKey="total_recoveries">Total Recoveries</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("daily_recoveries")} eventKey="daily_recoveries">Daily Recoveries</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("total_hospitalized")} eventKey="total_hospitalized">Total Hospitalized</ListGroup.Item>
-//     <ListGroup.Item action onClick={() => this.menuClick("daily_hospitalized")} eventKey="daily_hospitalized">Daily Hospitalized</ListGroup.Item>
-//   </ListGroup>
-//   </Tab.Container>
 
 export default TNCovid;

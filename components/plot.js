@@ -17,12 +17,14 @@ class CovidPlot extends React.Component {
     } else {
       return (
         <Plot
+          onClick={this.props.onClick}
           data={this.props.data}
           layout={this.props.layout}
           config={{
             displayModeBar: false,
             displayLogo: false,
             responsive: false,
+            mapboxAccessToken: 'pk.eyJ1IjoiYWRyaWFuanNlbHZhIiwiYSI6ImNrYXNtZzBjMzBmdjcyc3Bid2JlNmhlNHYifQ.zYAzrN8cBkRmBVmvt6v5bg'
           }}
         />
       );
