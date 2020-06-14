@@ -2,6 +2,8 @@ import React from 'react';
 import plotly from 'plotly.js/dist/plotly';
 import createPlotComponent from 'react-plotly.js/factory';
 
+import MapboxToken from '../token.json';
+
 const Plot = createPlotComponent(plotly);
 
 class CovidPlot extends React.Component {
@@ -24,7 +26,7 @@ class CovidPlot extends React.Component {
             displayModeBar: false,
             displayLogo: false,
             responsive: false,
-            mapboxAccessToken: 'pk.eyJ1IjoiYWRyaWFuanNlbHZhIiwiYSI6ImNrYXNtZzBjMzBmdjcyc3Bid2JlNmhlNHYifQ.zYAzrN8cBkRmBVmvt6v5bg'
+            mapboxAccessToken: MapboxToken.token
           }}
         />
       );
