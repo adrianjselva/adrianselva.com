@@ -10,3 +10,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 token.json
+
+#DS_STORE
+./DS_Store
+./assets/.DS_Store
