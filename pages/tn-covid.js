@@ -11,7 +11,6 @@ import Tab from 'react-bootstrap/Tab'
 import TabContainer from 'react-bootstrap/TabContainer'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
-import CountyScroll from '../components/county_scroll'
 import Tabs from 'react-bootstrap/Tabs'
 import Spinner from 'react-bootstrap/Spinner'
 
