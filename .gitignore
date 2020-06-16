@@ -12,5 +12,5 @@ yarn-error.log*
 token.json
 
 #DS_STORE
-./DS_Store
+./.DS_Store
 ./assets/.DS_Store
