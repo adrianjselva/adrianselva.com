@@ -110,17 +110,9 @@ class TNCovid extends React.Component {
       title: gtitle,
       xaxis: {
         title: "Date",
-        tickfont: {
-          size: 15,
-          color: 'black'
-        }
       },
       yaxis: {
         title: ytitle,
-        tickfont: {
-          size: 15,
-          color: 'black'
-        }
       }
     };
 
@@ -159,17 +151,9 @@ class TNCovid extends React.Component {
       title: gtitle,
       xaxis: {
         title: "Date",
-        tickfont: {
-          size: 15,
-          color: 'black'
-        }
       },
       yaxis: {
         title: ytitle,
-        tickfont: {
-          size: 15,
-          color: 'black'
-        }
       },
       showlegend: false
     };
@@ -217,17 +201,9 @@ class TNCovid extends React.Component {
     let layout = {
       xaxis: {
         title: 'Date',
-        tickfont: {
-          size: 15,
-          color: 'black'
-        }
       },
       yaxis: {
         title: 'Daily Tests',
-        tickfont: {
-          size: 15,
-          color: 'black'
-        }
       },
       yaxis2: {
         overlaying: "y",
