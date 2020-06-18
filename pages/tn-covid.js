@@ -650,7 +650,6 @@ class TNCovid extends React.Component {
           </Col>
           </Row>
         </Container>
-        <div style = {{height:"100vh"}}> </div>
         </div>
       </Layout>
     )
