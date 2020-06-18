@@ -111,12 +111,14 @@ class TNCovid extends React.Component {
       xaxis: {
         title: "Date",
         tickfont: {
+          size: 15,
           color: 'black'
         }
       },
       yaxis: {
         title: ytitle,
         tickfont: {
+          size: 15,
           color: 'black'
         }
       }
@@ -158,12 +160,14 @@ class TNCovid extends React.Component {
       xaxis: {
         title: "Date",
         tickfont: {
+          size: 15,
           color: 'black'
         }
       },
       yaxis: {
         title: ytitle,
         tickfont: {
+          size: 15,
           color: 'black'
         }
       },
@@ -214,12 +218,14 @@ class TNCovid extends React.Component {
       xaxis: {
         title: 'Date',
         tickfont: {
+          size: 15,
           color: 'black'
         }
       },
       yaxis: {
         title: 'Daily Tests',
         tickfont: {
+          size: 15,
           color: 'black'
         }
       },
