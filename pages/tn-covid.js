@@ -228,7 +228,6 @@ class TNCovid extends React.Component {
         orientation: 'h'
       },
       margin: {
-        l: 0,
         b: 0,
         t: 0,
         r: 45,
