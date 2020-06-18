@@ -529,7 +529,7 @@ class TNCovid extends React.Component {
         <Container fluid>
           <Row>
             <Col xl={4}>
-            <div className="mb-5">
+            <div className="mb-3">
               <Tabs onSelect={(key, evnt) => {this.updateView(key);}} defaultActiveKey="state" id="selection_menu" variant='pills'>
                 <Tab eventKey="state" title="Statewide">
                   <div className="mt-2">
