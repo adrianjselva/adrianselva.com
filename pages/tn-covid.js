@@ -27,7 +27,7 @@ const PLOT_COMPONENT = {
       ssr: false,
       loading: () => {
         return(
-        <div className="justify-content-center">
+        <div style={{textAlign: 'center'}}>
           <Spinner animation="border" role="status">
             <span className="sr-only">Loading...</span>
           </Spinner>
