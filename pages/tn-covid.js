@@ -288,6 +288,13 @@ class TNCovid extends React.Component {
         }
       },
       title: mtitle,
+      margin: {
+        l: 0,
+        r: 0,
+        b: 0,
+        t: 30,
+        pad: 2
+      }
     }
 
     return {
@@ -328,6 +335,13 @@ class TNCovid extends React.Component {
         }
       },
       title: mtitle,
+      margin: {
+        l: 0,
+        r: 0,
+        b: 0,
+        t: 30,
+        pad: 2
+      }
     }
 
     return {
