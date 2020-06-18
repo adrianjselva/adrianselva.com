@@ -6,6 +6,7 @@ class Navigation extends React.Component {
         return (
             <Navbar bg="primary" variant="dark" expand="sm">
                 <Navbar.Brand>aselva.org</Navbar.Brand>
+                <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
                         <Nav.Link href='/'>Home</Nav.Link>
