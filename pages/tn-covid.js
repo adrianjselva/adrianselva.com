@@ -51,6 +51,8 @@ class TNCovid extends React.Component {
       county: '',
       data: this.plotObject(StateData['active_cases']).data,
       layout: this.plotObject(StateData['active_cases']).layout,
+      mapTitle: StateMapData['active_cases'].mtitle,
+      graphTitle: StateData['active_cases'].gtitle,
       map_data: this.plotObject(StateMapData['active_cases']).data,
       map_layout: this.plotObject(StateMapData['active_cases']).layout,
       menu: {
@@ -107,12 +109,16 @@ class TNCovid extends React.Component {
   ];
 
     let layout = {
-      title: gtitle,
       xaxis: {
         title: "Date",
       },
       yaxis: {
         title: ytitle,
+      },
+      margin: {
+        r: 2,
+        t: 0,
+        pad: 2
       }
     };
 
@@ -148,14 +154,18 @@ class TNCovid extends React.Component {
   ];
 
     let layout = {
-      title: gtitle,
       xaxis: {
         title: "Date",
       },
       yaxis: {
         title: ytitle,
       },
-      showlegend: false
+      showlegend: false,
+      margin: {
+        r: 2,
+        t: 0,
+        pad: 2
+      }
     };
 
     return {
@@ -213,13 +223,16 @@ class TNCovid extends React.Component {
         showgrid: false
       },
       barmode: 'overlay',
-      title: gtitle,
       legend: {
         y: -.3,
         orientation: 'h'
       },
       margin: {
-        r: 45
+        l: 0,
+        b: 0,
+        t: 0,
+        r: 45,
+        pad: 2
       }
     }
 
@@ -241,6 +254,8 @@ class TNCovid extends React.Component {
       county: county,
       data: gObj.data,
       layout: gObj.layout,
+      mapTitle: this.state.mapTitle,
+      graphTitle: cData.gtitle,
       map_data: this.state.map_data,
       map_layout: this.state.map_layout,
       menu: {
@@ -286,12 +301,11 @@ class TNCovid extends React.Component {
           lon: -86
         }
       },
-      title: mtitle,
       margin: {
         l: 0,
         r: 0,
         b: 0,
-        t: 30,
+        t: 0,
         pad: 2
       }
     }
@@ -333,12 +347,11 @@ class TNCovid extends React.Component {
           lon: -86
         }
       },
-      title: mtitle,
       margin: {
         l: 0,
         r: 0,
         b: 0,
-        t: 30,
+        t: 0,
         pad: 2
       }
     }
@@ -362,6 +375,8 @@ class TNCovid extends React.Component {
           county: this.state.county,
           data: this.state.data,
           layout: this.state.layout,
+          mapTitle: mData.mtitle,
+          graphTitle: this.state.graphTitle,
           map_data: mObj.data,
           map_layout: mObj.layout,
           menu: {
@@ -390,6 +405,8 @@ class TNCovid extends React.Component {
           county: this.state.county,
           data: gObj.data,
           layout: gObj.layout,
+          mapTitle: mData.mtitle,
+          graphTitle: cData.gtitle,
           map_data: mObj.data,
           map_layout: mObj.layout,
           menu: {
@@ -418,6 +435,8 @@ class TNCovid extends React.Component {
         county: this.state.county,
         data: gObj.data,
         layout: gObj.layout,
+        mapTitle: mData.mtitle,
+        graphTitle: sData.gtitle,
         map_data: mObj.data,
         map_layout: mObj.layout,
         menu: {
@@ -449,6 +468,8 @@ class TNCovid extends React.Component {
         county: this.state.county,
         data: gObj.data,
         layout: gObj.layout,
+        mapTitle: mData.mtitle,
+        graphTitle: sData.gtitle,
         map_data: mObj.data,
         map_layout: mObj.layout,
         menu: {
@@ -475,6 +496,8 @@ class TNCovid extends React.Component {
         county: this.state.county,
         data: gObj.data,
         layout: gObj.layout,
+        mapTitle: mData.mtitle,
+        graphTitle: cData.gtitle,
         map_data: mObj.data,
         map_layout: mObj.layout,
         menu: {
@@ -498,6 +521,8 @@ class TNCovid extends React.Component {
         county: this.state.county,
         data: null,
         layout: null,
+        mapTitle: mData.mtitle,
+        graphTitle: "Select a county",
         map_data: mObj.data,
         map_layout: mObj.layout,
         menu: {
@@ -633,10 +658,11 @@ class TNCovid extends React.Component {
               </div>
             </Col>
           <Col xl={8}>
+          <div className="ml-3 mr-3">
             <Row className="justify-content-center">
               <div style={{width: "100%", height: "100%"}}>
               <Card>
-                <Card.Header>County Map</Card.Header>
+                <Card.Header>{this.state.mapTitle}</Card.Header>
                 <Card.Body>
                 <div className="mb-4">
                   <DynamicPlot data={this.state.map_data} layout={this.state.map_layout} onClick={(obj) => {this.handleMapClick(obj)}}/>
@@ -649,7 +675,7 @@ class TNCovid extends React.Component {
             <Row className="justify-content-center">
             <div style={{width: "100%", height: "100%"}}>
             <Card>
-              <Card.Header>Visualization</Card.Header>
+              <Card.Header>{this.state.graphTitle}</Card.Header>
               <Card.Body>
                 <DynamicPlot data={this.state.data} layout={this.state.layout} onClick={() => {}}/>
               </Card.Body>
@@ -666,6 +692,7 @@ class TNCovid extends React.Component {
                 </Row>
               </Col>
             </Row>
+            </div>
           </Col>
           </Row>
         </Container>
