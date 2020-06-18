@@ -512,10 +512,11 @@ class TNCovid extends React.Component {
   render() {
     return (
       <Layout title="TN COVID-19 Data">
-        <div className="mt-5 mb-5">
+        <div className="mt-3 mb-3">
         <Container fluid>
           <Row>
-            <Col md="auto">
+            <Col xl={4}>
+            <div className="mb-5">
               <Tabs onSelect={(key, evnt) => {this.updateView(key);}} defaultActiveKey="state" id="selection_menu" variant='pills'>
                 <Tab eventKey="state" title="Statewide">
                   <div className="mt-2">
@@ -616,9 +617,11 @@ class TNCovid extends React.Component {
                   </div>
                 </Tab>
               </Tabs>
+              </div>
             </Col>
-          <Col>
+          <Col xl={8}>
             <Row className="justify-content-center">
+              <div style={{width: "100%", height: "100%"}}>
               <Card>
                 <Card.Header>County Map</Card.Header>
                 <Card.Body>
@@ -627,15 +630,18 @@ class TNCovid extends React.Component {
                 </div>
                 </Card.Body>
               </Card>
+              </div>
             </Row>
             <div className="mt-5"></div>
             <Row className="justify-content-center">
+            <div style={{width: "100%", height: "100%"}}>
             <Card>
               <Card.Header>Visualization</Card.Header>
               <Card.Body>
                 <DynamicPlot data={this.state.data} layout={this.state.layout} onClick={() => {}}/>
               </Card.Body>
             </Card>
+            </div>
             </Row>
             <Row className="mt-5 justify-content-center">
               <Col>

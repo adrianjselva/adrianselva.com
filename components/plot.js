@@ -21,13 +21,15 @@ class CovidPlot extends React.Component {
         <Plot
           onClick={this.props.onClick}
           data={this.props.data}
-          layout={this.props.layout}
+          layout={Object.assign(this.props.layout, {autosize: true})}
           config={{
             displayModeBar: false,
             displayLogo: false,
             responsive: false,
             mapboxAccessToken: MapboxToken.token
           }}
+          useResizeHandler={true}
+          style={{width: "100%", height: "100%"}}
         />
       );
     }
