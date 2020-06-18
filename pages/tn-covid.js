@@ -109,10 +109,16 @@ class TNCovid extends React.Component {
     let layout = {
       title: gtitle,
       xaxis: {
-        title: "Date"
+        title: "Date",
+        tickfont: {
+          color: 'black'
+        }
       },
       yaxis: {
-        title: ytitle
+        title: ytitle,
+        tickfont: {
+          color: 'black'
+        }
       }
     };
 
@@ -150,10 +156,16 @@ class TNCovid extends React.Component {
     let layout = {
       title: gtitle,
       xaxis: {
-        title: "Date"
+        title: "Date",
+        tickfont: {
+          color: 'black'
+        }
       },
       yaxis: {
-        title: ytitle
+        title: ytitle,
+        tickfont: {
+          color: 'black'
+        }
       },
       showlegend: false
     };
@@ -195,16 +207,21 @@ class TNCovid extends React.Component {
       hoverinfo: 'x+y',
       line: {
         color: 'rgb(191, 23, 23)'
-
       }
     }];
 
     let layout = {
       xaxis: {
-        title: 'Date'
+        title: 'Date',
+        tickfont: {
+          color: 'black'
+        }
       },
       yaxis: {
-        title: 'Daily Tests'
+        title: 'Daily Tests',
+        tickfont: {
+          color: 'black'
+        }
       },
       yaxis2: {
         overlaying: "y",
