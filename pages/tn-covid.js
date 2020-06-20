@@ -117,6 +117,7 @@ class TNCovid extends React.Component {
       },
       margin: {
         r: 2,
+        l: 40,
         t: 0,
         pad: 2
       }
@@ -162,6 +163,7 @@ class TNCovid extends React.Component {
       },
       showlegend: false,
       margin: {
+        l: 40,
         r: 2,
         t: 0,
         pad: 2
@@ -231,6 +233,7 @@ class TNCovid extends React.Component {
         b: 0,
         t: 0,
         r: 45,
+        l: 40,
         pad: 2
       }
     }
