@@ -120,7 +120,8 @@ class TNCovid extends React.Component {
         l: 40,
         t: 0,
         pad: 2
-      }
+      },
+      autosize: true
     };
 
     return {
@@ -167,7 +168,8 @@ class TNCovid extends React.Component {
         r: 2,
         t: 0,
         pad: 2
-      }
+      },
+      autosize: true
     };
 
     return {
@@ -235,7 +237,8 @@ class TNCovid extends React.Component {
         r: 45,
         l: 40,
         pad: 2
-      }
+      },
+      autosize: true
     }
 
     return {
@@ -309,7 +312,8 @@ class TNCovid extends React.Component {
         b: 0,
         t: 0,
         pad: 2
-      }
+      },
+      autosize: true
     }
 
     return {
@@ -355,7 +359,8 @@ class TNCovid extends React.Component {
         b: 0,
         t: 0,
         pad: 2
-      }
+      },
+      autosize: true
     }
 
     return {
@@ -690,7 +695,7 @@ class TNCovid extends React.Component {
                   {"Source:"}<a href="https://www.tn.gov/health/cedep/ncov.html"> Tennessee Department of Health</a>
                 </Row>
                 <Row className="justify-content-center">
-                  {"Last updated: June 19, 2020"}
+                  {"Last updated: June 20, 2020"}
                 </Row>
               </Col>
             </Row>

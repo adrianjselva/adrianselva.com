@@ -21,7 +21,7 @@ class CovidPlot extends React.Component {
         <Plot
           onClick={this.props.onClick}
           data={this.props.data}
-          layout={Object.assign(this.props.layout, {autosize: true})}
+          layout={this.props.layout}
           config={{
             displayModeBar: false,
             displayLogo: false,
