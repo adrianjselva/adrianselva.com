@@ -558,151 +558,151 @@ class TNCovid extends React.Component {
     return (
       <Layout title="TN COVID-19 Data">
         <div className="mt-3 mb-3">
-        <Container fluid>
-          <Row>
-            <Col xl={4}>
-            <div className="mb-3">
-              <Tabs onSelect={(key, evnt) => {this.updateView(key);}} defaultActiveKey="state" id="selection_menu" variant='pills'>
-                <Tab eventKey="state" title="Statewide">
-                  <div className="mt-2">
-                    <Tabs onSelect={(key, evnt) => {this.updateMenu(key, this.state.state_menu[key])}} defaultActiveKey="active" id="total_daily" variant='pills'>
-                      <Tab eventKey="active" title="Active">
+          <Container fluid>
+            <Row>
+              <Col xl={4}>
+                <div className="mb-3">
+                  <Tabs onSelect={(key, evnt) => {this.updateView(key);}} defaultActiveKey="state" id="selection_menu" variant='pills'>
+                    <Tab eventKey="state" title="Statewide">
                       <div className="mt-2">
-                        <Tab.Container id="active_selection" defaultActiveKey="active_cases">
-                          <ListGroup>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("active", "active_cases")}} eventKey="active_cases">Current Active Cases</ListGroup.Item>
-                          </ListGroup>
-                        </Tab.Container>
+                        <Tabs onSelect={(key, evnt) => {this.updateMenu(key, this.state.state_menu[key])}} defaultActiveKey="active" id="total_daily" variant='pills'>
+                          <Tab eventKey="active" title="Active">
+                            <div className="mt-2">
+                              <Tab.Container id="active_selection" defaultActiveKey="active_cases">
+                                <ListGroup>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("active", "active_cases")}} eventKey="active_cases">Current Active Cases</ListGroup.Item>
+                                </ListGroup>
+                              </Tab.Container>
+                            </div>
+                          </Tab>
+                            <Tab eventKey="total" title="Total">
+                              <div className="mt-2">
+                                <Tab.Container id="total_selection" defaultActiveKey="total_cases">
+                                  <ListGroup>
+                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_cases")}} eventKey="total_cases">Cases</ListGroup.Item>
+                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_deaths")}} eventKey="total_deaths">Deaths</ListGroup.Item>
+                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_recoveries")}} eventKey="total_recoveries">Recoveries</ListGroup.Item>
+                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_hospitalized")}} eventKey="total_hospitalized">Hospitalizations</ListGroup.Item>
+                                  </ListGroup>
+                                </Tab.Container>
+                              </div>
+                            </Tab>
+                          <Tab eventKey="daily" title="Daily">
+                            <div className="mt-2">
+                              <Tab.Container id="daily_selection" defaultActiveKey="daily_cases">
+                                <ListGroup>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases")}} eventKey="daily_cases">Cases</ListGroup.Item>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_deaths")}} eventKey="daily_deaths">Deaths</ListGroup.Item>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_active")}} eventKey="daily_active">Active</ListGroup.Item>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_recoveries")}} eventKey="daily_recoveries">Recoveries</ListGroup.Item>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_hospitalized")}} eventKey="daily_hospitalized">Hospitalizations</ListGroup.Item>
+                                </ListGroup>
+                              </Tab.Container>
+                            </div>
+                          </Tab>
+                          <Tab eventKey="testing" title="Testing">
+                            <div className="mt-2">
+                              <Tab.Container id="testing_selection" defaultActiveKey="testing">
+                                <ListGroup>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("testing", "testing")}} eventKey="testing">Testing Data</ListGroup.Item>
+                                </ListGroup>
+                              </Tab.Container>
+                            </div>
+                          </Tab>
+                        </Tabs>
                       </div>
-                      </Tab>
-                        <Tab eventKey="total" title="Total">
-                        <div className="mt-2">
-                          <Tab.Container id="total_selection" defaultActiveKey="total_cases">
-                            <ListGroup>
-                              <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_cases")}} eventKey="total_cases">Cases</ListGroup.Item>
-                              <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_deaths")}} eventKey="total_deaths">Deaths</ListGroup.Item>
-                              <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_recoveries")}} eventKey="total_recoveries">Recoveries</ListGroup.Item>
-                              <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_hospitalized")}} eventKey="total_hospitalized">Hospitalizations</ListGroup.Item>
-                            </ListGroup>
-                          </Tab.Container>
-                        </div>
-                        </Tab>
-                      <Tab eventKey="daily" title="Daily">
+                    </Tab>
+                    <Tab eventKey="county" title="County level">
                       <div className="mt-2">
-                        <Tab.Container id="daily_selection" defaultActiveKey="daily_cases">
-                          <ListGroup>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases")}} eventKey="daily_cases">Cases</ListGroup.Item>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_deaths")}} eventKey="daily_deaths">Deaths</ListGroup.Item>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_active")}} eventKey="daily_active">Active</ListGroup.Item>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_recoveries")}} eventKey="daily_recoveries">Recoveries</ListGroup.Item>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_hospitalized")}} eventKey="daily_hospitalized">Hospitalizations</ListGroup.Item>
-                          </ListGroup>
-                        </Tab.Container>
+                        <Tabs onSelect={(key, evnt) => {this.updateMenu(key, this.state.menu[key])}} defaultActiveKey="active" id="total_daily" variant='pills'>
+                          <Tab eventKey="active" title="Active">
+                            <div className="mt-2">
+                              <Tab.Container id="active_selection" defaultActiveKey="active_cases">
+                                <ListGroup>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("active", "active_cases")}} eventKey="active_cases">Current Active Cases</ListGroup.Item>
+                                </ListGroup>
+                              </Tab.Container>
+                            </div>
+                          </Tab>
+                            <Tab eventKey="total" title="Total">
+                              <div className="mt-2">
+                                <Tab.Container id="total_selection" defaultActiveKey="total_cases">
+                                  <ListGroup>
+                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_cases")}} eventKey="total_cases">Cases</ListGroup.Item>
+                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_deaths")}} eventKey="total_deaths">Deaths</ListGroup.Item>
+                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_recoveries")}} eventKey="total_recoveries">Recoveries</ListGroup.Item>
+                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_hospitalized")}} eventKey="total_hospitalized">Hospitalizations</ListGroup.Item>
+                                  </ListGroup>
+                                </Tab.Container>
+                              </div>
+                            </Tab>
+                          <Tab eventKey="daily" title="Daily">
+                            <div className="mt-2">
+                              <Tab.Container id="daily_selection" defaultActiveKey="daily_cases">
+                                <ListGroup>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases")}} eventKey="daily_cases">Cases</ListGroup.Item>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_deaths")}} eventKey="daily_deaths">Deaths</ListGroup.Item>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_active")}} eventKey="daily_active">Active</ListGroup.Item>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_recoveries")}} eventKey="daily_recoveries">Recoveries</ListGroup.Item>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_hospitalized")}} eventKey="daily_hospitalized">Hospitalizations</ListGroup.Item>
+                                </ListGroup>
+                              </Tab.Container>
+                            </div>
+                          </Tab>
+                          <Tab eventKey="testing" title="Testing">
+                            <div className="mt-2">
+                              <Tab.Container id="testing_selection" defaultActiveKey="testing">
+                                <ListGroup>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("testing", "testing")}} eventKey="testing">Testing Data</ListGroup.Item>
+                                </ListGroup>
+                              </Tab.Container>
+                            </div>
+                          </Tab>
+                        </Tabs>
                       </div>
-                      </Tab>
-                      <Tab eventKey="testing" title="Testing">
-                      <div className="mt-2">
-                        <Tab.Container id="testing_selection" defaultActiveKey="testing">
-                          <ListGroup>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("testing", "testing")}} eventKey="testing">Testing Data</ListGroup.Item>
-                          </ListGroup>
-                        </Tab.Container>
-                      </div>
-                      </Tab>
-                    </Tabs>
-                  </div>
-                </Tab>
-                <Tab eventKey="county" title="County level">
-                  <div className="mt-2">
-                    <Tabs onSelect={(key, evnt) => {this.updateMenu(key, this.state.menu[key])}} defaultActiveKey="active" id="total_daily" variant='pills'>
-                      <Tab eventKey="active" title="Active">
-                      <div className="mt-2">
-                        <Tab.Container id="active_selection" defaultActiveKey="active_cases">
-                          <ListGroup>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("active", "active_cases")}} eventKey="active_cases">Current Active Cases</ListGroup.Item>
-                          </ListGroup>
-                        </Tab.Container>
-                      </div>
-                      </Tab>
-                        <Tab eventKey="total" title="Total">
-                        <div className="mt-2">
-                          <Tab.Container id="total_selection" defaultActiveKey="total_cases">
-                            <ListGroup>
-                              <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_cases")}} eventKey="total_cases">Cases</ListGroup.Item>
-                              <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_deaths")}} eventKey="total_deaths">Deaths</ListGroup.Item>
-                              <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_recoveries")}} eventKey="total_recoveries">Recoveries</ListGroup.Item>
-                              <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_hospitalized")}} eventKey="total_hospitalized">Hospitalizations</ListGroup.Item>
-                            </ListGroup>
-                          </Tab.Container>
-                        </div>
-                        </Tab>
-                      <Tab eventKey="daily" title="Daily">
-                      <div className="mt-2">
-                        <Tab.Container id="daily_selection" defaultActiveKey="daily_cases">
-                          <ListGroup>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases")}} eventKey="daily_cases">Cases</ListGroup.Item>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_deaths")}} eventKey="daily_deaths">Deaths</ListGroup.Item>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_active")}} eventKey="daily_active">Active</ListGroup.Item>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_recoveries")}} eventKey="daily_recoveries">Recoveries</ListGroup.Item>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_hospitalized")}} eventKey="daily_hospitalized">Hospitalizations</ListGroup.Item>
-                          </ListGroup>
-                        </Tab.Container>
-                      </div>
-                      </Tab>
-                      <Tab eventKey="testing" title="Testing">
-                      <div className="mt-2">
-                        <Tab.Container id="testing_selection" defaultActiveKey="testing">
-                          <ListGroup>
-                            <ListGroup.Item action onClick={() => {this.updateMenu("testing", "testing")}} eventKey="testing">Testing Data</ListGroup.Item>
-                          </ListGroup>
-                        </Tab.Container>
-                      </div>
-                      </Tab>
-                    </Tabs>
-                  </div>
-                </Tab>
-              </Tabs>
-              </div>
-            </Col>
-          <Col xl={8}>
-          <div className="ml-3 mr-3">
-            <Row className="justify-content-center">
-              <div style={{width: "100%", height: "100%"}}>
-              <Card>
-                <Card.Header>{this.state.mapTitle}</Card.Header>
-                <Card.Body>
-                <div className="mb-4">
-                  <DynamicPlot data={this.state.map_data} layout={this.state.map_layout} onClick={(obj) => {this.handleMapClick(obj)}}/>
+                    </Tab>
+                  </Tabs>
                 </div>
-                </Card.Body>
-              </Card>
-              </div>
-            </Row>
-            <div className="mt-5"></div>
-            <Row className="justify-content-center">
-            <div style={{width: "100%", height: "100%"}}>
-            <Card>
-              <Card.Header>{this.state.graphTitle}</Card.Header>
-              <Card.Body>
-                <DynamicPlot data={this.state.data} layout={this.state.layout} onClick={() => {}}/>
-              </Card.Body>
-            </Card>
-            </div>
-            </Row>
-            <Row className="mt-5 justify-content-center">
-              <Col>
-                <Row className="justify-content-center">
-                  {"Source:"}<a href="https://www.tn.gov/health/cedep/ncov.html"> Tennessee Department of Health</a>
-                </Row>
-                <Row className="justify-content-center">
-                  {"Last updated: June 23, 2020"}
-                </Row>
+              </Col>
+              <Col xl={8}>
+                <div className="ml-3 mr-3">
+                  <Row className="justify-content-center">
+                    <div style={{width: "100%", height: "100%"}}>
+                      <Card>
+                        <Card.Header>{this.state.mapTitle}</Card.Header>
+                        <Card.Body>
+                          <div className="mb-4">
+                            <DynamicPlot data={this.state.map_data} layout={this.state.map_layout} onClick={(obj) => {this.handleMapClick(obj)}}/>
+                          </div>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  </Row>
+                  <div className="mt-5"></div>
+                  <Row className="justify-content-center">
+                    <div style={{width: "100%", height: "100%"}}>
+                      <Card>
+                        <Card.Header>{this.state.graphTitle}</Card.Header>
+                        <Card.Body>
+                          <DynamicPlot data={this.state.data} layout={this.state.layout} onClick={() => {}}/>
+                        </Card.Body>
+                      </Card>
+                    </div>
+                  </Row>
+                </div>
               </Col>
             </Row>
-            </div>
-          </Col>
-          </Row>
-        </Container>
+          </Container>
+          <div className="mt-3">
+            <Container fluid>
+              <Row className="justify-content-center">
+                <span> Source: <a href="https://www.tn.gov/health/cedep/ncov.html"> Tennessee Department of Health</a> </span>
+              </Row>
+              <Row className="justify-content-center">
+                {"Last updated: June 23, 2020"}
+              </Row>
+            </Container>
+          </div>
         </div>
       </Layout>
     )
