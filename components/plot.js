@@ -23,10 +23,16 @@ class CovidPlot extends React.Component {
           data={this.props.data}
           layout={this.props.layout}
           config={{
-            displayModeBar: false,
             displayLogo: false,
             responsive: false,
-            mapboxAccessToken: MapboxToken.token
+            mapboxAccessToken: MapboxToken.token,
+            toImageButtonOptions: {
+              format: 'png',
+              filename: 'plot',
+              height: 900,
+              width: 1500,
+              scale: 2
+            },
           }}
           useResizeHandler={true}
           style={{width: "100%", height: "100%"}}
