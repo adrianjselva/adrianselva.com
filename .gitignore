@@ -14,3 +14,5 @@ token.json
 #DS_STORE
 ./.DS_Store
 ./assets/.DS_Store
+
+public/
