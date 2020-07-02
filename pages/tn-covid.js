@@ -15,15 +15,12 @@ import Tabs from 'react-bootstrap/Tabs'
 import Spinner from 'react-bootstrap/Spinner'
 
 import CountyData from '../assets/counties.json'
-import CountyGeoJSON from '../assets/county_geojson.json'
 import CountyMapData from '../assets/cmaps.json'
 
 import StateData from '../assets/state.json'
-import StateGeoJSON from '../assets/tn_geojson.json'
 import StateMapData from '../assets/smaps.json'
 
-const PLOT_COMPONENT = {
-  plotly: dynamic(import('../components/plot'), {
+const AbstractPlot = dynamic(import('../components/plots/abstract_plot'), {
       ssr: false,
       loading: () => {
         return(
@@ -34,10 +31,20 @@ const PLOT_COMPONENT = {
         </div>
       )
       }
-  })
-};
+  });
 
-const DynamicPlot = PLOT_COMPONENT.plotly;
+const AbstractMap = dynamic(import('../components/maps/abstract_map'), {
+      ssr: false,
+      loading: () => {
+        return(
+        <div style={{textAlign: 'center'}}>
+          <Spinner animation="border" role="status">
+            <span className="sr-only">Loading...</span>
+          </Spinner>
+        </div>
+        )
+        }
+  });
 
 class TNCovid extends React.Component {
 
@@ -49,12 +56,8 @@ class TNCovid extends React.Component {
       ctype: 'active_cases',
       view: 'state',
       county: '',
-      data: this.plotObject(StateData['active_cases']).data,
-      layout: this.plotObject(StateData['active_cases']).layout,
       mapTitle: StateMapData['active_cases'].mtitle,
       graphTitle: StateData['active_cases'].gtitle,
-      map_data: this.plotObject(StateMapData['active_cases']).data,
-      map_layout: this.plotObject(StateMapData['active_cases']).layout,
       menu: {
         active: 'active_cases',
         total: 'total_cases',
@@ -70,328 +73,34 @@ class TNCovid extends React.Component {
     };
   }
 
-  plotObject(obj) {
-    if(obj == null) {
-      return {
-        data: {},
-        layout: {}
-      };
-    }
-
-    if(obj.type == "total") {
-      return this.totalPlot(obj.xval, obj.yval, obj.linecolor, obj.gtitle, obj.ytitle);
-    } else if(obj.type == "daily") {
-      return this.dailyPlot(obj.xval, obj.yval, obj.barcolor, obj.fillcolor, obj.movingAverage, obj.movingLineColor, obj.gtitle, obj.ytitle);
-    } else if(obj.type == "testing") {
-      return this.testPlot(obj.xval, obj.totalTestVal, obj.positiveVals, obj.percentPositive, obj.gtitle)
-    } else if(obj.type == "cmap") {
-      return this.countyMap(obj.counties, obj.z, obj.mtitle, obj.hovtext, obj.col1, obj.col2, obj.col3, obj.col4, obj.col5)
-    } else if(obj.type == "smap") {
-      return this.stateMap(obj.z, obj.hovtext, obj.col, obj.mtitle)
-    } else {
-      return {
-        data: {},
-        layout: {}
-      };
-    }
-  }
-
-  totalPlot(xval, yval, linecolor, gtitle, ytitle) {
-    let data = [{
-      x: xval,
-      y: yval,
-      type: 'scatter',
-      mode: 'lines+markers',
-      line: {
-        color: linecolor
-      }
-    }
-  ];
-
-    let layout = {
-      xaxis: {
-        title: "Date",
-      },
-      yaxis: {
-        title: ytitle,
-      },
-      margin: {
-        r: 2,
-        l: 60,
-        t: 5,
-        pad: 2
-      },
-      autosize: true
-    };
-
-    return {
-      data: data,
-      layout: layout
-    }
-  }
-
-  dailyPlot(xval, yval, barcolor, fillcolor, movingAverage, movingLineColor, gtitle, ytitle) {
-    let data = [{
-      x: xval,
-      y: yval,
-      type: 'bar',
-      mode: 'lines+markers',
-      marker: {
-        color: barcolor
-      },
-      hoverinfo: 'x+y'
-    },
-    {
-      x: xval,
-      y: movingAverage,
-      type: 'scatter',
-      mode: 'lines',
-      fill: 'tozeroy',
-      fillcolor: fillcolor,
-      line: {
-        color: movingLineColor
-      },
-      hoverinfo: 'skip'
-    }
-  ];
-
-    let layout = {
-      xaxis: {
-        title: "Date",
-      },
-      yaxis: {
-        title: ytitle,
-      },
-      showlegend: false,
-      margin: {
-        l: 60,
-        r: 2,
-        t: 0,
-        pad: 2
-      },
-      autosize: true
-    };
-
-    return {
-      data: data,
-      layout: layout
-    }
-  }
-
-  testPlot(xval, totalTestVal, positiveVals, percentPositive, gtitle) {
-    let data = [{
-      x: xval,
-      y: totalTestVal,
-      type: 'bar',
-      name: 'Total Tests',
-      hoverinfo: 'x+y',
-      marker: {
-        color: 'rgb(206, 162, 219)'
-      }
-    },
-    {
-      x: xval,
-      y: positiveVals,
-      type: 'bar',
-      name: 'Positive Tests',
-      hoverinfo: 'x+y',
-      marker: {
-        color: 'rgb(0, 182, 199)'
-      }
-    },
-    {
-      x: xval,
-      y: percentPositive,
-      type: 'scatter',
-      mode: 'lines',
-      name: 'Positive (%)',
-      yaxis: 'y2',
-      hoverinfo: 'x+y',
-      line: {
-        color: 'rgb(191, 23, 23)'
-      }
-    }];
-
-    let layout = {
-      xaxis: {
-        title: 'Date',
-      },
-      yaxis: {
-        title: 'Daily Tests',
-      },
-      yaxis2: {
-        overlaying: "y",
-        side: "right",
-        title: "Positive (%)",
-        rangemode: 'tozero',
-        showgrid: false
-      },
-      barmode: 'overlay',
-      legend: {
-        y: -.3,
-        orientation: 'h'
-      },
-      margin: {
-        b: 0,
-        t: 0,
-        r: 45,
-        l: 60,
-        pad: 2
-      },
-      autosize: true
-    }
-
-    return {
-      data: data,
-      layout: layout
-    }
-
-  }
-
   updateCounty(county) {
     let cData = CountyData[county][this.state.ctype];
-    let gObj = this.plotObject(cData);
 
     this.setState({
       ctype: this.state.ctype,
       stype: this.state.stype,
       view: this.state.view,
       county: county,
-      data: gObj.data,
-      layout: gObj.layout,
       mapTitle: this.state.mapTitle,
       graphTitle: cData.gtitle,
-      map_data: this.state.map_data,
-      map_layout: this.state.map_layout,
-      menu: {
-        active: this.state.menu.active,
-        total: this.state.menu.total,
-        daily: this.state.menu.daily,
-        testing: this.state.menu.testing
-      },
+      menu: this.state.menu,
       state_menu: this.state.state_menu
     });
-  }
-
-  countyMap(counties, z, mtitle, hovtext, col1, col2, col3, col4, col5) {
-    let hov_temp = '<br>' + hovtext + ' %{z}<extra></extra>'
-
-    let data = [{
-      type: "choroplethmapbox",
-      geojson: CountyGeoJSON,
-      locations: counties,
-      z: z,
-      featureidkey: "properties.NAME",
-      colorscale: [
-        ['0.0', col1],
-        ['0.25', col2],
-        ['0.5', col3],
-        ['0.75', col4],
-        ['1.0', col5]
-      ],
-      hovertemplate:
-        '<b>%{location}</b>' +
-        hov_temp,
-      marker: {
-         opacity: 0.75
-       }
-    }];
-
-    let layout = {
-      mapbox: {
-        style: "light",
-        zoom: 5.35,
-        center: {
-          lat: 35.51,
-          lon: -86
-        }
-      },
-      margin: {
-        l: 0,
-        r: 0,
-        b: 0,
-        t: 0,
-        pad: 2
-      },
-      autosize: true
-    }
-
-    return {
-      data: data,
-      layout: layout
-    }
-  }
-
-  stateMap(z, hovtext, col, mtitle) {
-    let hov_temp = '<br>' + hovtext + ' %{z}<extra></extra>'
-
-    let data = [{
-      type: "choroplethmapbox",
-      geojson: StateGeoJSON,
-      locations: ["Tennessee"],
-      z: [z],
-      featureidkey: "properties.NAME",
-      colorscale: [
-        ['0.0', 'rgb(255, 255, 255)'],
-        ['1.0', col]
-      ],
-      hovertemplate:
-        '<b>%{location}</b>' +
-        hov_temp,
-      marker: {
-         opacity: 0.75
-       },
-      showscale: false
-    }];
-
-    let layout = {
-      mapbox: {
-        style: "light",
-        zoom: 5.35,
-        center: {
-          lat: 35.51,
-          lon: -86
-        }
-      },
-      margin: {
-        l: 0,
-        r: 0,
-        b: 0,
-        t: 0,
-        pad: 2
-      },
-      autosize: true
-    }
-
-    return {
-      data: data,
-      layout: layout
-    }
   }
 
   updateMenu(cat, type) {
     if(this.state.view == 'county') {
       if(this.state.county == '') {
         let mData = CountyMapData[type];
-        let mObj = this.plotObject(mData);
 
         let s = {
           stype: this.state.stype,
           ctype: type,
           view: this.state.view,
           county: this.state.county,
-          data: this.state.data,
-          layout: this.state.layout,
           mapTitle: mData.mtitle,
           graphTitle: this.state.graphTitle,
-          map_data: mObj.data,
-          map_layout: mObj.layout,
-          menu: {
-            active: this.state.menu.active,
-            total: this.state.menu.total,
-            daily: this.state.menu.daily,
-            testing: this.state.menu.testing
-          },
+          menu: this.state.menu,
           state_menu: this.state.state_menu
         };
 
@@ -399,29 +108,16 @@ class TNCovid extends React.Component {
         this.setState(s);
       } else {
         let cData = CountyData[this.state.county][type];
-        let gObj = this.plotObject(cData);
-
         let mData = CountyMapData[type];
-        let mObj = this.plotObject(mData);
-
 
         let s = {
           stype: this.state.stype,
           ctype: type,
           view: this.state.view,
           county: this.state.county,
-          data: gObj.data,
-          layout: gObj.layout,
           mapTitle: mData.mtitle,
           graphTitle: cData.gtitle,
-          map_data: mObj.data,
-          map_layout: mObj.layout,
-          menu: {
-            active: this.state.menu.active,
-            total: this.state.menu.total,
-            daily: this.state.menu.daily,
-            testing: this.state.menu.testing
-          },
+          menu: this.state.menu,
           state_menu: this.state.state_menu
         };
 
@@ -430,28 +126,16 @@ class TNCovid extends React.Component {
       }
     } else if (this.state.view == 'state') {
       let sData = StateData[type];
-      let gObj = this.plotObject(sData);
-
       let mData = StateMapData[type];
-      let mObj = this.plotObject(mData);
 
       let s = {
         stype: type,
         ctype: this.state.ctype,
         view: this.state.view,
         county: this.state.county,
-        data: gObj.data,
-        layout: gObj.layout,
         mapTitle: mData.mtitle,
         graphTitle: sData.gtitle,
-        map_data: mObj.data,
-        map_layout: mObj.layout,
-        menu: {
-          active: this.state.menu.active,
-          total: this.state.menu.total,
-          daily: this.state.menu.daily,
-          testing: this.state.menu.testing
-        },
+        menu: this.state.menu,
         state_menu: this.state.state_menu
       };
 
@@ -463,81 +147,47 @@ class TNCovid extends React.Component {
   updateView(view) {
     if(view == 'state') {
       let sData = StateData[this.state.stype];
-      let gObj = this.plotObject(sData);
-
       let mData = StateMapData[this.state.stype];
-      let mObj = this.plotObject(mData);
 
       let s = {
         stype: this.state.stype,
         ctype: this.state.ctype,
         view: view,
         county: this.state.county,
-        data: gObj.data,
-        layout: gObj.layout,
         mapTitle: mData.mtitle,
         graphTitle: sData.gtitle,
-        map_data: mObj.data,
-        map_layout: mObj.layout,
-        menu: {
-          active: this.state.menu.active,
-          total: this.state.menu.total,
-          daily: this.state.menu.daily,
-          testing: this.state.menu.testing
-        },
+        menu: this.state.menu,
         state_menu: this.state.state_menu
       };
 
       this.setState(s);
     } else if(view == 'county' && this.state.county != '') {
       let cData = CountyData[this.state.county][this.state.ctype];
-      let gObj = this.plotObject(cData);
-
       let mData = CountyMapData[this.state.ctype];
-      let mObj = this.plotObject(mData);
 
       let s = {
         stype: this.state.stype,
         ctype: this.state.ctype,
         view: view,
         county: this.state.county,
-        data: gObj.data,
-        layout: gObj.layout,
         mapTitle: mData.mtitle,
         graphTitle: cData.gtitle,
-        map_data: mObj.data,
-        map_layout: mObj.layout,
-        menu: {
-          active: this.state.menu.active,
-          total: this.state.menu.total,
-          daily: this.state.menu.daily,
-          testing: this.state.menu.testing
-        },
+        menu: this.state.menu,
         state_menu: this.state.state_menu
       };
 
       this.setState(s);
     } else {
       let mData = CountyMapData[this.state.ctype];
-      let mObj = this.plotObject(mData);
 
       let s = {
         stype: this.state.stype,
         ctype: this.state.ctype,
         view: view,
         county: this.state.county,
-        data: null,
-        layout: null,
         mapTitle: mData.mtitle,
         graphTitle: "Select a county",
-        map_data: mObj.data,
-        map_layout: mObj.layout,
-        menu: {
-          active: this.state.menu.active,
-          total: this.state.menu.total,
-          daily: this.state.menu.daily,
-          testing: this.state.menu.testing
-        },
+        menu: this.state.menu,
         state_menu: this.state.state_menu
       };
 
@@ -550,6 +200,34 @@ class TNCovid extends React.Component {
       this.updateCounty(obj.points[0].properties.NAME);
     } else {
       return;
+    }
+  }
+
+  map() {
+    if(this.state.view == 'county') {
+      return {
+        mObj: CountyMapData[this.state.ctype],
+        onClick: (obj) => {this.handleMapClick(obj)}
+      };
+    } else if(this.state.view == 'state') {
+      return {
+        mObj: StateMapData[this.state.stype],
+        onClick: () => {}
+      };
+    }
+  }
+
+  plot() {
+    if(this.state.view == 'county') {
+      if(this.state.county == '') {
+        return {
+          type: 'select'
+        };
+      } else {
+        return CountyData[this.state.county][this.state.ctype];
+      }
+    } else if(this.state.view == 'state') {
+      return StateData[this.state.stype];
     }
   }
 
@@ -672,7 +350,7 @@ class TNCovid extends React.Component {
                         <Card.Header>{this.state.mapTitle}</Card.Header>
                         <Card.Body>
                           <div className="mb-4">
-                            <DynamicPlot data={this.state.map_data} layout={this.state.map_layout} onClick={(obj) => {this.handleMapClick(obj)}}/>
+                            <AbstractMap mObj={this.map().mObj} onClick={this.map().onClick}/>
                           </div>
                         </Card.Body>
                       </Card>
@@ -684,7 +362,7 @@ class TNCovid extends React.Component {
                       <Card>
                         <Card.Header>{this.state.graphTitle}</Card.Header>
                         <Card.Body>
-                          <DynamicPlot data={this.state.data} layout={this.state.layout} onClick={() => {}}/>
+                          <AbstractPlot pObj={this.plot()} />
                         </Card.Body>
                       </Card>
                     </div>
