@@ -105,12 +105,14 @@ class AbstractMap extends React.Component {
       z: mObj.z,
       featureidkey: "properties.NAME",
       colorscale: [
-        ['0.0', mObj.col1],
-        ['0.25', mObj.col2],
-        ['0.5', mObj.col3],
-        ['0.75', mObj.col4],
+        ['0', mObj.col1],
+        ['0.01', mObj.col2],
+        ['0.33', mObj.col3],
+        ['0.66', mObj.col4],
         ['1.0', mObj.col5]
       ],
+      zmin: 0,
+      zmax: Math.max(...mObj.z),
       hovertemplate:
         '<b>%{location}</b>' +
         hov_temp,
