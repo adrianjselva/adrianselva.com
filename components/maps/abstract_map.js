@@ -13,6 +13,30 @@ class AbstractMap extends React.Component {
 
   constructor(props) {
     super(props)
+
+    this.state = {
+      stateZoom: 6.35,
+      countyZoom: 6.2
+    }
+  }
+
+  componentDidMount() {
+    this.updateZoomLevels(window.innerWidth)
+  }
+
+  updateZoomLevels(width) {
+    this.setState({
+      stateZoom: this.stateZoom(width),
+      countyZoom: this.countyZoom(width)
+    });
+  }
+
+  stateZoom(width) {
+    return ((0.001144 * width) + 4.42797);
+  }
+
+  countyZoom(width) {
+    return ((0.0012712 * width) + 4.0644);
   }
 
   mamObject() {
@@ -49,9 +73,9 @@ class AbstractMap extends React.Component {
     let layout = {
       mapbox: {
         style: "light",
-        zoom: 5.35,
+        zoom: this.state.stateZoom,
         center: {
-          lat: 35.51,
+          lat: 35.8,
           lon: -86
         }
       },
@@ -98,9 +122,9 @@ class AbstractMap extends React.Component {
     let layout = {
       mapbox: {
         style: "light",
-        zoom: 5.35,
+        zoom: this.state.countyZoom,
         center: {
-          lat: 35.51,
+          lat: 35.8,
           lon: -86
         }
       },
