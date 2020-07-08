@@ -16,3 +16,6 @@ token.json
 ./assets/.DS_Store
 
 public/
+
+build.sh
+remote-build.sh
