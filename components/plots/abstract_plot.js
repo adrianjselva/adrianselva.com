@@ -59,7 +59,7 @@ class AbstractPlot extends React.Component {
       margin: {
         l: 60,
         r: 2,
-        t: 0,
+        t: 25,
         pad: 2
       },
       autosize: true
@@ -103,7 +103,7 @@ class AbstractPlot extends React.Component {
       margin: {
         r: 2,
         l: 60,
-        t: 5,
+        t: 25,
         pad: 2
       },
       autosize: true
@@ -181,7 +181,7 @@ class AbstractPlot extends React.Component {
       },
       margin: {
         b: 0,
-        t: 0,
+        t: 25,
         r: 45,
         l: 60,
         pad: 2
