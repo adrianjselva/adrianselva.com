@@ -151,6 +151,7 @@ class AbstractMap extends React.Component {
         config={{
           displayLogo: false,
           responsive: false,
+          displayModeBar: false,
           mapboxAccessToken: MapboxToken.token,
           toImageButtonOptions: {
             format: 'png',
