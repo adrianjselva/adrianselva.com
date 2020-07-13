@@ -70,7 +70,7 @@ class AbstractPlot extends React.Component {
       data: data,
       layout: layout,
       config: {
-        displayLogo: false,
+        displaylogo: false,
         responsive: false,
         toImageButtonOptions: {
           format: 'png',
@@ -115,7 +115,7 @@ class AbstractPlot extends React.Component {
       data: data,
       layout: layout,
       config: {
-        displayLogo: false,
+        displaylogo: false,
         responsive: false,
         toImageButtonOptions: {
           format: 'png',
@@ -203,7 +203,7 @@ class AbstractPlot extends React.Component {
       data: data,
       layout: layout,
       config: {
-        displayLogo: false,
+        displaylogo: false,
         responsive: false,
         toImageButtonOptions: {
           format: 'png',
@@ -256,7 +256,7 @@ class AbstractPlot extends React.Component {
       },
       config: {
         displaymodebar: false,
-        displayLogo: false,
+        displaylogo: false,
         responsive: false,
         staticPlot: true,
         modeBarButtonsToRemove: [
