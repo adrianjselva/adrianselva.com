@@ -62,7 +62,8 @@ class AbstractPlot extends React.Component {
         t: 25,
         pad: 2
       },
-      autosize: true
+      autosize: true,
+      dragmode: 'pan'
     };
 
     return {
@@ -106,7 +107,8 @@ class AbstractPlot extends React.Component {
         t: 25,
         pad: 2
       },
-      autosize: true
+      autosize: true,
+      dragmode: 'pan'
     };
 
     return {
@@ -186,7 +188,8 @@ class AbstractPlot extends React.Component {
         l: 60,
         pad: 2
       },
-      autosize: true
+      autosize: true,
+      dragmode: 'pan'
     }
 
     return {
