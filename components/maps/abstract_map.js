@@ -15,8 +15,7 @@ class AbstractMap extends React.Component {
     super(props)
 
     this.state = {
-      stateZoom: 6.35,
-      countyZoom: 6.2
+      zoom: 6.35,
     }
   }
 
@@ -26,17 +25,12 @@ class AbstractMap extends React.Component {
 
   updateZoomLevels(width) {
     this.setState({
-      stateZoom: this.stateZoom(width),
-      countyZoom: this.countyZoom(width)
+      zoom: this.stateZoom(width),
     });
   }
 
   stateZoom(width) {
     return ((0.001144 * width) + 4.42797);
-  }
-
-  countyZoom(width) {
-    return ((0.0012712 * width) + 4.0644);
   }
 
   mamObject() {
@@ -73,7 +67,7 @@ class AbstractMap extends React.Component {
     let layout = {
       mapbox: {
         style: "light",
-        zoom: this.state.stateZoom,
+        zoom: this.state.zoom,
         center: {
           lat: 35.8,
           lon: -86
@@ -118,13 +112,14 @@ class AbstractMap extends React.Component {
         hov_temp,
       marker: {
          opacity: 0.75
-       }
+       },
+       showscale: false
     }];
 
     let layout = {
       mapbox: {
         style: "light",
-        zoom: this.state.countyZoom,
+        zoom: this.state.zoom,
         center: {
           lat: 35.8,
           lon: -86
