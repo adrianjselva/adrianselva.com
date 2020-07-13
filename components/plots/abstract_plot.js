@@ -79,6 +79,13 @@ class AbstractPlot extends React.Component {
           width: 1500,
           scale: 2
         },
+        modeBarButtonsToRemove: [
+          'hoverClosestCartesian',
+          'hoverCompareCartesian',
+          'select2d',
+          'lasso2d',
+          'autoScale2d'
+        ]
       }
     }
   }
@@ -258,14 +265,7 @@ class AbstractPlot extends React.Component {
         displaymodebar: false,
         displaylogo: false,
         responsive: false,
-        staticPlot: true,
-        modeBarButtonsToRemove: [
-          'hoverClosestCartesian',
-          'hoverCompareCartesian',
-          'select2d',
-          'lasso2d',
-          'autoScale2d'
-        ]
+        staticPlot: true
       }
     }
   }
