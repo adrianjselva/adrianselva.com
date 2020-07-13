@@ -8,9 +8,18 @@ class AbstractPlot extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {rev: 0}
+  }
+
+  incrementRevision() {
+    this.setState({
+      rev: this.state.rev + 1
+    });
   }
 
   plotObject(pObj) {
+    this.incrementRevision()
+
     switch(this.props.pObj.type) {
       case "daily":
         return this.dailyPlot(this.props.pObj);
@@ -281,6 +290,7 @@ class AbstractPlot extends React.Component {
         layout={pObj.layout}
         config={pObj.config}
         useResizeHandler={true}
+        revision={this.state.rev}
         style={{width: "100%", height: "100%"}}
       />
     );
