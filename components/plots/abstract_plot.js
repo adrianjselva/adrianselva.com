@@ -168,7 +168,7 @@ class AbstractPlot extends React.Component {
       y: pObj.percentPositive,
       type: 'scatter',
       mode: 'lines',
-      name: 'Positive (%)',
+      name: 'Percent Positive (7-day Average)',
       yaxis: 'y2',
       hoverinfo: 'x+y',
       line: {
