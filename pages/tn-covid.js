@@ -319,6 +319,7 @@ class TNCovid extends React.Component {
                               <Tab.Container id="daily_selection" defaultActiveKey="daily_cases">
                                 <ListGroup>
                                   <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases")}} eventKey="daily_cases">Cases</ListGroup.Item>
+                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases_specimen")}} eventKey="daily_cases_specimen">Cases (Specimen Collection Date)</ListGroup.Item>
                                   <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_deaths")}} eventKey="daily_deaths">Deaths</ListGroup.Item>
                                   <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_active")}} eventKey="daily_active">Active</ListGroup.Item>
                                   <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_recoveries")}} eventKey="daily_recoveries">Recoveries</ListGroup.Item>
