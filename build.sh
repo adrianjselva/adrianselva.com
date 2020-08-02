@@ -19,17 +19,17 @@ fi
 zip -r counties.zip counties
 scp counties.zip adrianjselva_gmail_com@aselva.org:/tmp/counties.zip
 
-cp "cmaps.json" "$SITE_PATH/assets/cmaps.json"
-cp "smaps.json" "$SITE_PATH/assets/smaps.json"
-cp "counties.json" "$SITE_PATH/assets/counties.json"
-cp "state.json" "$SITE_PATH/assets/state.json"
+cp "output/county_maps.json" "$SITE_PATH/assets/county_maps.json"
+cp "output/state_maps.json" "$SITE_PATH/assets/state_maps.json"
+cp "output/county_plots.json" "$SITE_PATH/assets/county_plots.json"
+cp "output/state_plots.json" "$SITE_PATH/assets/state_plots.json"
 
 cd "$SITE_PATH"
 
-git add "assets/cmaps.json"
-git add "assets/smaps.json"
-git add "assets/counties.json"
-git add "assets/state.json"
+git add "assets/county_maps.json"
+git add "assets/state_maps.json"
+git add "assets/county_plots.json"
+git add "assets/state_plots.json"
 
 echo "Verify that the proper changes have been made."
 read -p "Are you sure you want to push to live? " -n 1 -r

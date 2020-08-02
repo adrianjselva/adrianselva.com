@@ -14,11 +14,11 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import Tabs from 'react-bootstrap/Tabs'
 import Spinner from 'react-bootstrap/Spinner'
 
-import CountyData from '../assets/counties.json'
-import CountyMapData from '../assets/cmaps.json'
+import CountyData from '../assets/county_plots.json'
+import CountyMapData from '../assets/county_maps.json'
 
-import StateData from '../assets/state.json'
-import StateMapData from '../assets/smaps.json'
+import StateData from '../assets/state_plots.json'
+import StateMapData from '../assets/state_maps.json'
 
 const AbstractPlot = dynamic(import('../components/plots/abstract_plot'), {
       ssr: false,
