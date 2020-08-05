@@ -20,6 +20,8 @@ import CountyMapData from '../assets/county_maps.json'
 import StateData from '../assets/state_plots.json'
 import StateMapData from '../assets/state_maps.json'
 
+import DateString from '../assets/date.json'
+
 const AbstractPlot = dynamic(import('../components/plots/abstract_plot'), {
       ssr: false,
       loading: () => {
@@ -378,7 +380,7 @@ class TNCovid extends React.Component {
                 <span> Source: <a href="https://www.tn.gov/health/cedep/ncov.html"> Tennessee Department of Health</a> </span>
               </Row>
               <Row className="justify-content-center">
-                {"Last updated: August 4, 2020"}
+                {"Last updated: " + DateString['date']}
               </Row>
             </Container>
           </div>
