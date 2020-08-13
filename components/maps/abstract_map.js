@@ -2,164 +2,65 @@ import React from 'react';
 import plotly from 'plotly.js/dist/plotly';
 import createPlotComponent from 'react-plotly.js/factory';
 
-import StateGeoJSON from '../../assets/tn_geojson.json'
-import CountyGeoJSON from '../../assets/county_geojson.json'
+import StateMapData from '../../assets/state_maps.json'
+import CountyMapData from '../../assets/county_maps.json'
 
 import MapboxToken from '../../token.json';
 
 const Map = createPlotComponent(plotly);
+
+import * as maps from './maps.js'
 
 class AbstractMap extends React.Component {
 
   constructor(props) {
     super(props)
 
+    let mapObject = this.mapObject(StateMapData["active_cases"]);
+
     this.state = {
-      zoom: 6.35,
+      data: mapObject.data,
+      layout: mapObject.layout
     }
   }
 
-  componentDidMount() {
-    this.updateZoomLevels(window.innerWidth)
+  componentWillReceiveProps(next) {
+    if(next.selected.view == 'county') {
+      let mapObject = this.mapObject(CountyMapData[next.selected.county_metric]);
+
+      this.setState({
+        data: mapObject.data,
+        layout: mapObject.layout
+      });
+    } else if(next.selected.view == 'state') {
+      let mapObject = this.mapObject(StateMapData[next.selected.state_metric]);
+
+      this.setState({
+        data: mapObject.data,
+        layout: mapObject.layout
+      });
+    }
   }
 
-  updateZoomLevels(width) {
-    this.setState({
-      zoom: this.stateZoom(width),
-    });
-  }
-
-  stateZoom(width) {
-    return ((0.001144 * width) + 4.42797);
-  }
-
-  mamObject() {
-    switch(this.props.mObj.type) {
+  mapObject(mObj) {
+    switch(mObj.type) {
       case "smap":
-        return this.stateMap(this.props.mObj);
+        return maps.stateMap(mObj, this.props.zoom);
       case "cmap":
-        return this.countyMap(this.props.mObj);
-    }
-  }
-
-  stateMap(mObj) {
-    let hov_temp = '<br>' + mObj.hovtext + ' %{z}<extra></extra>'
-
-    let data = [{
-      type: "choroplethmapbox",
-      geojson: StateGeoJSON,
-      locations: ["Tennessee"],
-      z: [mObj.z],
-      featureidkey: "properties.NAME",
-      colorscale: [
-        ['0.0', 'rgb(255, 255, 255)'],
-        ['1.0', mObj.col]
-      ],
-      hovertemplate:
-        '<b>%{location}</b>' +
-        hov_temp,
-      marker: {
-         opacity: 0.75
-       },
-      showscale: false
-    }];
-
-    let layout = {
-      mapbox: {
-        style: "light",
-        zoom: this.state.zoom,
-        center: {
-          lat: 35.8,
-          lon: -86
-        }
-      },
-      margin: {
-        l: 0,
-        r: 0,
-        b: 0,
-        t: 0,
-        pad: 2
-      },
-      autosize: true
-    }
-
-    return {
-      data: data,
-      layout: layout
-    }
-  }
-
-  countyMap(mObj) {
-    let hov_temp = '<br>' + mObj.hovtext + ' %{z}<extra></extra>'
-
-    let data = [{
-      type: "choroplethmapbox",
-      geojson: CountyGeoJSON,
-      locations: mObj.counties,
-      z: mObj.z,
-      featureidkey: "properties.NAME",
-      colorscale: [
-        ['0', mObj.col1],
-        ['0.01', mObj.col2],
-        ['0.33', mObj.col3],
-        ['0.66', mObj.col4],
-        ['1.0', mObj.col5]
-      ],
-      zmin: 0,
-      zmax: Math.max(...mObj.z),
-      hovertemplate:
-        '<b>%{location}</b>' +
-        hov_temp,
-      marker: {
-         opacity: 0.75
-       },
-       showscale: false
-    }];
-
-    let layout = {
-      mapbox: {
-        style: "light",
-        zoom: this.state.zoom,
-        center: {
-          lat: 35.8,
-          lon: -86
-        }
-      },
-      margin: {
-        l: 0,
-        r: 0,
-        b: 0,
-        t: 0,
-        pad: 2
-      },
-      autosize: true
-    }
-
-    return {
-      data: data,
-      layout: layout
+        return maps.countyMap(mObj, this.props.zoom);
     }
   }
 
   render() {
-    let mObj = this.mamObject(this.props.mObj);
-
     return(
       <Map
-        data={mObj.data}
-        layout={mObj.layout}
+        data={this.state.data}
+        layout={this.state.layout}
         config={{
           displayLogo: false,
           responsive: false,
           displayModeBar: false,
           mapboxAccessToken: MapboxToken.token,
-          toImageButtonOptions: {
-            format: 'png',
-            filename: 'plot',
-            height: 900,
-            width: 1500,
-            scale: 2
-          },
         }}
         useResizeHandler={true}
         style={{width: "100%", height: "100%"}}

@@ -71,8 +71,51 @@ class TNCovid extends React.Component {
         total: 'total_cases',
         daily: 'daily_cases',
         testing: 'testing'
-      }
+      },
+      zoom: 6
     };
+  }
+
+  componentDidMount() {
+    let zoom;
+
+    if(window.innerWidth < 1200) {
+      zoom = this.zoomLevelSmall(window.innerWidth);
+    } else {
+      zoom = this.zoomLevelBig(window.innerWidth);
+    }
+
+    this.setState({
+      ctype: this.state.ctype,
+      stype: this.state.stype,
+      view: this.state.view,
+      county: this.state.county,
+      mapTitle: this.state.mapTitle,
+      graphTitle: this.state.graphTitle,
+      menu: this.state.menu,
+      state_menu: this.state.state_menu,
+      zoom: zoom
+    })
+  }
+
+  zoomLevelSmall(w) {
+    let squareCoefficient = (parseFloat("0.0000034470") * -1);
+    let firstDegCoefficient = parseFloat("0.0076156061");
+    let intercept = parseFloat("2.0565757576");
+
+    return((squareCoefficient * (w * w)) +
+           (firstDegCoefficient * w) +
+           intercept);
+  }
+
+  zoomLevelBig(w) {
+    let squareCoefficient = (parseFloat("0.0000002669") * -1);
+    let firstDegCoefficient = parseFloat("0.0018410956");
+    let intercept = parseFloat("4.0390769231");
+
+    return((squareCoefficient * (w * w)) +
+           (firstDegCoefficient * w) +
+           intercept);
   }
 
   updateCounty(county) {
@@ -86,7 +129,8 @@ class TNCovid extends React.Component {
       mapTitle: this.state.mapTitle,
       graphTitle: cData.gtitle,
       menu: this.state.menu,
-      state_menu: this.state.state_menu
+      state_menu: this.state.state_menu,
+      zoom: this.state.zoom
     });
   }
 
@@ -103,7 +147,8 @@ class TNCovid extends React.Component {
           mapTitle: mData.mtitle,
           graphTitle: this.state.graphTitle,
           menu: this.state.menu,
-          state_menu: this.state.state_menu
+          state_menu: this.state.state_menu,
+          zoom: this.state.zoom
         };
 
         s.menu[cat] = type;
@@ -120,7 +165,8 @@ class TNCovid extends React.Component {
           mapTitle: mData.mtitle,
           graphTitle: cData.gtitle,
           menu: this.state.menu,
-          state_menu: this.state.state_menu
+          state_menu: this.state.state_menu,
+          zoom: this.state.zoom
         };
 
         s.menu[cat] = type;
@@ -138,7 +184,8 @@ class TNCovid extends React.Component {
         mapTitle: mData.mtitle,
         graphTitle: sData.gtitle,
         menu: this.state.menu,
-        state_menu: this.state.state_menu
+        state_menu: this.state.state_menu,
+        zoom: this.state.zoom
       };
 
       s.state_menu[cat] = type;
@@ -159,7 +206,8 @@ class TNCovid extends React.Component {
         mapTitle: mData.mtitle,
         graphTitle: sData.gtitle,
         menu: this.state.menu,
-        state_menu: this.state.state_menu
+        state_menu: this.state.state_menu,
+        zoom: this.state.zoom
       };
 
       this.setState(s);
@@ -175,7 +223,8 @@ class TNCovid extends React.Component {
         mapTitle: mData.mtitle,
         graphTitle: cData.gtitle,
         menu: this.state.menu,
-        state_menu: this.state.state_menu
+        state_menu: this.state.state_menu,
+        zoom: this.state.zoom
       };
 
       this.setState(s);
@@ -190,7 +239,8 @@ class TNCovid extends React.Component {
         mapTitle: mData.mtitle,
         graphTitle: "Select a county",
         menu: this.state.menu,
-        state_menu: this.state.state_menu
+        state_menu: this.state.state_menu,
+        zoom: this.state.zoom
       };
 
       this.setState(s);
@@ -200,39 +250,17 @@ class TNCovid extends React.Component {
   handleMapClick(obj) {
     if(this.state.view == 'county') {
       this.updateCounty(obj.points[0].properties.NAME);
-    } else {
-      return;
     }
   }
 
-  map() {
-    if(this.state.view == 'county') {
-      return {
-        mObj: CountyMapData[this.state.ctype],
-        onClick: (obj) => {this.handleMapClick(obj)}
-      };
-    } else if(this.state.view == 'state') {
-      return {
-        mObj: StateMapData[this.state.stype],
-        onClick: () => {}
-      };
-    }
+  selected() {
+    return({
+      county: this.state.county,
+      state_metric: this.state.stype,
+      county_metric:  this.state.ctype,
+      view: this.state.view
+    })
   }
-
-  plot() {
-    if(this.state.view == 'county') {
-      if(this.state.county == '') {
-        return {
-          type: 'select'
-        };
-      } else {
-        return CountyData[this.state.county][this.state.ctype];
-      }
-    } else if(this.state.view == 'state') {
-      return StateData[this.state.stype];
-    }
-  }
-
 
   render() {
     return (
@@ -354,7 +382,7 @@ class TNCovid extends React.Component {
                         <Card.Header>{this.state.mapTitle}</Card.Header>
                         <Card.Body>
                           <div className="mb-4">
-                            <AbstractMap mObj={this.map().mObj} onClick={this.map().onClick}/>
+                            <AbstractMap selected={this.selected()} onClick={(obj) => this.handleMapClick(obj)} zoom={this.state.zoom}/>
                           </div>
                         </Card.Body>
                       </Card>
@@ -366,7 +394,7 @@ class TNCovid extends React.Component {
                       <Card>
                         <Card.Header>{this.state.graphTitle}</Card.Header>
                         <Card.Body>
-                          <AbstractPlot pObj={this.plot()} />
+                          <AbstractPlot selected={this.selected()} />
                         </Card.Body>
                       </Card>
                     </div>

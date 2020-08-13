@@ -5,428 +5,94 @@ import Row from 'react-bootstrap/Row'
 
 const Plot = createPlotComponent(plotly);
 
+import CountyData from '../../assets/county_plots.json'
+import StateData from '../../assets/state_plots.json'
+
+import * as plots from './plots.js'
+
 class AbstractPlot extends React.Component {
 
   constructor(props) {
     super(props)
+
+    let pObj = this.plotObject(StateData["active_cases"])
+
+    this.state = {
+      data: pObj.data,
+      layout: pObj.layout,
+      config: pObj.config
+    }
+  }
+
+  componentWillReceiveProps(next) {
+    if(next.selected.view == "county") {
+      if(next.selected.county == '') {
+        let selectPlot = this.plotObject({type: 'select'});
+
+        this.setState({
+          data: selectPlot.data,
+          layout: selectPlot.layout,
+          config: selectPlot.config
+        });
+      } else {
+        let countyPlot = this.plotObject(CountyData[next.selected.county][next.selected.county_metric]);
+
+        this.setState({
+          data: countyPlot.data,
+          layout: countyPlot.layout,
+          config: countyPlot.config
+        });
+      }
+    } else if(next.selected.view == "state") {
+      let statePlot = this.plotObject(StateData[next.selected.state_metric]);
+
+      this.setState({
+        data: statePlot.data,
+        layout: statePlot.layout,
+        config: statePlot.config
+      });
+    }
   }
 
   plotObject(pObj) {
-    switch(this.props.pObj.type) {
+    switch(pObj.type) {
       case "daily":
-        return this.dailyPlot(this.props.pObj);
+        return plots.dailyPlot(pObj);
       case "total":
-        return this.totalPlot(this.props.pObj);
+        return plots.totalPlot(pObj);
       case "testing":
-        return this.testPlot(this.props.pObj);
+        return plots.testPlot(pObj);
       case "select":
-        return this.select();
+        return plots.select();
       case "specimen":
-        return this.dailySpecimenPlot(this.props.pObj);
+        return plots.dailySpecimenPlot(pObj);
     }
   }
 
-  dailySpecimenPlot(pObj) {
-    let fourteenDayBegin = pObj.xval[(pObj.xval.length - 10)];
-    let fourteenDayEnd = pObj.xval[(pObj.xval.length - 1)];
-    let recHeight = Math.max(...pObj.yval);
-
-    let data = [{
-      x: pObj.xval,
-      y: pObj.yval,
-      type: 'bar',
-      mode: 'lines+markers',
-      marker: {
-        color: pObj.barcolor
-      },
-      hoverinfo: 'x+y'
-    },
-    {
-      x: pObj.xval,
-      y: pObj.movingAverage,
-      type: 'scatter',
-      mode: 'lines',
-      fill: 'tozeroy',
-      fillcolor: pObj.fillcolor,
-      line: {
-        color: pObj.movingLineColor
-      },
-      hoverinfo: 'skip'
-    }
-  ];
-
-    let layout = {
-      xaxis: {
-        title: "Date",
-      },
-      yaxis: {
-        title: pObj.ytitle,
-      },
-      showlegend: false,
-      margin: {
-        l: 60,
-        r: 2,
-        t: 25,
-        pad: 2
-      },
-      autosize: true,
-      dragmode: 'pan',
-      shapes: [
-        {
-          type: 'rect',
-          xref: 'x',
-          yref: 'y',
-          x0: fourteenDayBegin,
-          y0: 0,
-          x1: fourteenDayEnd,
-          y1: recHeight,
-          line: {
-            color: 'rgba(0, 0, 0, 0)'
-          },
-          fillcolor: 'rgba(156, 156, 156, 0.3)'
-        }
-      ]
-    };
-
-    return {
-      data: data,
-      layout: layout,
-      config: {
-        displaylogo: false,
-        responsive: false,
-        toImageButtonOptions: {
-          format: 'png',
-          filename: 'plot',
-          height: 900,
-          width: 1500,
-          scale: 2
-        },
-        modeBarButtonsToRemove: [
-          'hoverClosestCartesian',
-          'hoverCompareCartesian',
-          'select2d',
-          'lasso2d',
-          'autoScale2d'
-        ]
-      }
-    }
-  }
-
-  totalPlot(pObj) {
-    let data = [{
-      x: pObj.xval,
-      y: pObj.yval,
-      type: 'scatter',
-      mode: 'lines+markers',
-      line: {
-        color: pObj.linecolor
-      }
-    }];
-
-    let layout = {
-      xaxis: {
-        title: "Date",
-      },
-      yaxis: {
-        title: pObj.ytitle,
-      },
-      margin: {
-        r: 2,
-        l: 60,
-        t: 25,
-        pad: 2
-      },
-      autosize: true,
-      dragmode: 'pan'
-    };
-
-    return {
-      data: data,
-      layout: layout,
-      config: {
-        displaylogo: false,
-        responsive: false,
-        toImageButtonOptions: {
-          format: 'png',
-          filename: 'plot',
-          height: 900,
-          width: 1500,
-          scale: 2
-        },
-        modeBarButtonsToRemove: [
-          'hoverClosestCartesian',
-          'hoverCompareCartesian',
-          'select2d',
-          'lasso2d',
-          'autoScale2d'
-        ]
-      }
-    }
-  }
-
-  dailyPlot(pObj) {
-    let data = [{
-      x: pObj.xval,
-      y: pObj.yval,
-      type: 'bar',
-      mode: 'lines+markers',
-      marker: {
-        color: pObj.barcolor
-      },
-      hoverinfo: 'x+y'
-    },
-    {
-      x: pObj.xval,
-      y: pObj.movingAverage,
-      type: 'scatter',
-      mode: 'lines',
-      fill: 'tozeroy',
-      fillcolor: pObj.fillcolor,
-      line: {
-        color: pObj.movingLineColor
-      },
-      hoverinfo: 'skip'
-    }
-  ];
-
-    let layout = {
-      xaxis: {
-        title: "Date",
-      },
-      yaxis: {
-        title: pObj.ytitle,
-      },
-      showlegend: false,
-      margin: {
-        l: 60,
-        r: 2,
-        t: 25,
-        pad: 2
-      },
-      autosize: true,
-      dragmode: 'pan'
-    };
-
-    return {
-      data: data,
-      layout: layout,
-      config: {
-        displaylogo: false,
-        responsive: false,
-        toImageButtonOptions: {
-          format: 'png',
-          filename: 'plot',
-          height: 900,
-          width: 1500,
-          scale: 2
-        },
-        modeBarButtonsToRemove: [
-          'hoverClosestCartesian',
-          'hoverCompareCartesian',
-          'select2d',
-          'lasso2d',
-          'autoScale2d'
-        ]
-      }
-    }
-  }
-
-  totalPlot(pObj) {
-    let data = [{
-      x: pObj.xval,
-      y: pObj.yval,
-      type: 'scatter',
-      mode: 'lines+markers',
-      line: {
-        color: pObj.linecolor
-      }
-    }];
-
-    let layout = {
-      xaxis: {
-        title: "Date",
-      },
-      yaxis: {
-        title: pObj.ytitle,
-      },
-      margin: {
-        r: 2,
-        l: 60,
-        t: 25,
-        pad: 2
-      },
-      autosize: true,
-      dragmode: 'pan'
-    };
-
-    return {
-      data: data,
-      layout: layout,
-      config: {
-        displaylogo: false,
-        responsive: false,
-        toImageButtonOptions: {
-          format: 'png',
-          filename: 'plot',
-          height: 900,
-          width: 1500,
-          scale: 2
-        },
-        modeBarButtonsToRemove: [
-          'hoverClosestCartesian',
-          'hoverCompareCartesian',
-          'select2d',
-          'lasso2d',
-          'autoScale2d'
-        ]
-      }
-    }
-  }
-
-  testPlot(pObj) {
-    let data = [{
-      x: pObj.xval,
-      y: pObj.totalTestVal,
-      type: 'bar',
-      name: 'Total Tests',
-      hoverinfo: 'x+y',
-      marker: {
-        color: 'rgb(206, 162, 219)'
-      }
-    },
-    {
-      x: pObj.xval,
-      y: pObj.positiveVals,
-      type: 'bar',
-      name: 'Positive Tests',
-      hoverinfo: 'x+y',
-      marker: {
-        color: 'rgb(0, 182, 199)'
-      }
-    },
-    {
-      x: pObj.xval,
-      y: pObj.percentPositive,
-      type: 'scatter',
-      mode: 'lines',
-      name: 'Percent Positive (7-day Average)',
-      yaxis: 'y2',
-      hoverinfo: 'x+y',
-      line: {
-        color: 'rgb(191, 23, 23)'
-      }
-    }];
-
-    let layout = {
-      xaxis: {
-        title: 'Date',
-      },
-      yaxis: {
-        title: 'Daily Tests',
-      },
-      yaxis2: {
-        overlaying: "y",
-        side: "right",
-        title: "Positive (%)",
-        rangemode: 'tozero',
-        showgrid: false
-      },
-      barmode: 'overlay',
-      legend: {
-        y: -.3,
-        orientation: 'h'
-      },
-      margin: {
-        b: 0,
-        t: 25,
-        r: 45,
-        l: 60,
-        pad: 2
-      },
-      autosize: true,
-      dragmode: 'pan'
-    }
-
-    return {
-      data: data,
-      layout: layout,
-      config: {
-        displaylogo: false,
-        responsive: false,
-        toImageButtonOptions: {
-          format: 'png',
-          filename: 'plot',
-          height: 900,
-          width: 1500,
-          scale: 2
-        },
-        modeBarButtonsToRemove: [
-          'hoverClosestCartesian',
-          'hoverCompareCartesian',
-          'select2d',
-          'lasso2d',
-          'autoScale2d'
-        ]
-      }
-    }
-
-  }
-
-  select() {
-    return {
-      data: [{
-        x: [0.5],
-        y: [0.5],
-        mode: 'text',
-        type: 'scatter',
-        hoverinfo: 'skip'
-      }],
-      layout: {
-        xaxis: {
-          showgrid: false,
-          zeroline: false,
-          visible: false
-        },
-        yaxis: {
-          showgrid: false,
-          zeroline: false,
-          visible: false
-        },
-        annotations: [{
-          showarrow: false,
-          text: "Select a county",
-          x: 0.5,
-          y: 0.5,
-          font: {
-            size: 30
-          }
-        }]
-      },
-      config: {
-        displaymodebar: false,
-        displaylogo: false,
-        responsive: false,
-        staticPlot: true
-      }
-    }
+  shouldShowDisclaimer() {
+    return(
+      (this.props.selected.county_metric == "daily_cases_specimen" &&
+       this.props.selected.view == "county" && this.props.selected.county != "")
+        ||
+      (this.props.selected.state_metric == "daily_cases_specimen" && this.props.selected.view == "state")
+    );
   }
 
 
 
   render() {
-    let pObj = this.plotObject(this.props.pObj);
     let disclaimer = '';
 
-    if(this.props.pObj.type == "specimen") {
+    if(this.shouldShowDisclaimer()) {
       disclaimer = "* Recent dates are incomplete due to lags in reporting. The gray box corresponds to dates that are likely to not yet be reported completely.";
     }
 
     return(
       <Row>
         <Plot
-          data={pObj.data}
-          layout={pObj.layout}
-          config={pObj.config}
+          data={this.state.data}
+          layout={this.state.layout}
+          config={this.state.config}
           useResizeHandler={true}
           style={{width: "100%", height: "100%"}}
         />
