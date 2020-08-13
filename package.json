@@ -26,6 +26,7 @@
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
     "react-ga": "^2.7.0",
-    "react-plotly.js": "^2.4.0"
+    "react-plotly.js": "^2.4.0",
+    "serialize-javascript": "^4.0.0"
   }
 }
