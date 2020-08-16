@@ -13,12 +13,9 @@ import DropdownButton from 'react-bootstrap/DropdownButton'
 import Dropdown from 'react-bootstrap/Dropdown'
 import Tabs from 'react-bootstrap/Tabs'
 import Spinner from 'react-bootstrap/Spinner'
+import Alert from 'react-bootstrap/Alert'
 
-import CountyData from '../assets/county_plots.json'
-import CountyMapData from '../assets/county_maps.json'
-
-import StateData from '../assets/state_plots.json'
-import StateMapData from '../assets/state_maps.json'
+import Titles from '../assets/titles.json'
 
 import DateString from '../assets/date.json'
 
@@ -54,23 +51,16 @@ class TNCovid extends React.Component {
     super(props)
 
     this.state = {
-      stype: 'active_cases',
-      ctype: 'active_cases',
+      state_data: 'active',
+      county_data: 'active',
       view: 'state',
       county: '',
-      mapTitle: StateMapData['active_cases'].mtitle,
-      graphTitle: StateData['active_cases'].gtitle,
-      menu: {
-        active: 'active_cases',
-        total: 'total_cases',
-        daily: 'daily_cases',
-        testing: 'testing'
+      title: Titles.state.active,
+      county_menu: {
+        metrics: 'active',
       },
       state_menu: {
-        active: 'active_cases',
-        total: 'total_cases',
-        daily: 'daily_cases',
-        testing: 'testing'
+        metrics: 'active',
       },
       zoom: 6
     };
@@ -86,16 +76,15 @@ class TNCovid extends React.Component {
     }
 
     this.setState({
-      ctype: this.state.ctype,
-      stype: this.state.stype,
+      state_data: this.state.state_data,
+      county_data: this.state.county_data,
       view: this.state.view,
       county: this.state.county,
-      mapTitle: this.state.mapTitle,
-      graphTitle: this.state.graphTitle,
-      menu: this.state.menu,
+      title: this.state.title,
+      county_menu: this.state.county_menu,
       state_menu: this.state.state_menu,
       zoom: zoom
-    })
+    });
   }
 
   zoomLevelSmall(w) {
@@ -119,126 +108,102 @@ class TNCovid extends React.Component {
   }
 
   updateCounty(county) {
-    let cData = CountyData[county][this.state.ctype];
-
     this.setState({
-      ctype: this.state.ctype,
-      stype: this.state.stype,
+      state_data: this.state.state_data,
+      county_data: this.state.county_data,
       view: this.state.view,
       county: county,
-      mapTitle: this.state.mapTitle,
-      graphTitle: cData.gtitle,
-      menu: this.state.menu,
+      title: Titles.county[county][this.state.county_data],
+      county_menu: this.state.county_menu,
       state_menu: this.state.state_menu,
       zoom: this.state.zoom
     });
   }
 
-  updateMenu(cat, type) {
+  updateMenu(menu, data) {
     if(this.state.view == 'county') {
       if(this.state.county == '') {
-        let mData = CountyMapData[type];
-
         let s = {
-          stype: this.state.stype,
-          ctype: type,
+          state_data: this.state.state_data,
+          county_data: data,
           view: this.state.view,
           county: this.state.county,
-          mapTitle: mData.mtitle,
-          graphTitle: this.state.graphTitle,
-          menu: this.state.menu,
+          title: "Select a county",
+          county_menu: this.state.county_menu,
           state_menu: this.state.state_menu,
           zoom: this.state.zoom
         };
 
-        s.menu[cat] = type;
+        s.county_menu[menu] = data;
         this.setState(s);
       } else {
-        let cData = CountyData[this.state.county][type];
-        let mData = CountyMapData[type];
 
         let s = {
-          stype: this.state.stype,
-          ctype: type,
+          state_data: this.state.state_data,
+          county_data: data,
           view: this.state.view,
           county: this.state.county,
-          mapTitle: mData.mtitle,
-          graphTitle: cData.gtitle,
-          menu: this.state.menu,
+          title: Titles.county[this.state.county][data],
+          county_menu: this.state.county_menu,
           state_menu: this.state.state_menu,
           zoom: this.state.zoom
         };
 
-        s.menu[cat] = type;
+        s.county_menu[menu] = data;
         this.setState(s);
       }
     } else if (this.state.view == 'state') {
-      let sData = StateData[type];
-      let mData = StateMapData[type];
-
       let s = {
-        stype: type,
-        ctype: this.state.ctype,
+        state_data: data,
+        county_data: this.state.county_data,
         view: this.state.view,
         county: this.state.county,
-        mapTitle: mData.mtitle,
-        graphTitle: sData.gtitle,
-        menu: this.state.menu,
+        title: Titles.state[data],
+        county_menu: this.state.county_menu,
         state_menu: this.state.state_menu,
         zoom: this.state.zoom
       };
 
-      s.state_menu[cat] = type;
+      s.state_menu[menu] = data;
       this.setState(s);
     }
   }
 
   updateView(view) {
     if(view == 'state') {
-      let sData = StateData[this.state.stype];
-      let mData = StateMapData[this.state.stype];
-
       let s = {
-        stype: this.state.stype,
-        ctype: this.state.ctype,
+        state_data: this.state.state_data,
+        county_data: this.state.county_data,
         view: view,
         county: this.state.county,
-        mapTitle: mData.mtitle,
-        graphTitle: sData.gtitle,
-        menu: this.state.menu,
+        title: Titles.state[this.state.state_data],
+        county_menu: this.state.county_menu,
         state_menu: this.state.state_menu,
         zoom: this.state.zoom
       };
 
       this.setState(s);
     } else if(view == 'county' && this.state.county != '') {
-      let cData = CountyData[this.state.county][this.state.ctype];
-      let mData = CountyMapData[this.state.ctype];
-
       let s = {
-        stype: this.state.stype,
-        ctype: this.state.ctype,
+        state_data: this.state.state_data,
+        county_data: this.state.county_data,
         view: view,
         county: this.state.county,
-        mapTitle: mData.mtitle,
-        graphTitle: cData.gtitle,
-        menu: this.state.menu,
+        title: Titles.county[this.state.county][this.state.county_data],
+        county_menu: this.state.county_menu,
         state_menu: this.state.state_menu,
         zoom: this.state.zoom
       };
 
       this.setState(s);
     } else {
-      let mData = CountyMapData[this.state.ctype];
-
       let s = {
-        stype: this.state.stype,
-        ctype: this.state.ctype,
+        state_data: this.state.state_data,
+        county_data: this.state.county_data,
         view: view,
         county: this.state.county,
-        mapTitle: mData.mtitle,
-        graphTitle: "Select a county",
-        menu: this.state.menu,
+        title: "Select a county",
+        county_menu: this.state.county_menu,
         state_menu: this.state.state_menu,
         zoom: this.state.zoom
       };
@@ -256,8 +221,8 @@ class TNCovid extends React.Component {
   selected() {
     return({
       county: this.state.county,
-      state_metric: this.state.stype,
-      county_metric:  this.state.ctype,
+      state_data: this.state.state_data,
+      county_data:  this.state.county_data,
       view: this.state.view
     })
   }
@@ -273,47 +238,18 @@ class TNCovid extends React.Component {
                   <Tabs onSelect={(key, evnt) => {this.updateView(key);}} defaultActiveKey="state" id="selection_menu" variant='pills'>
                     <Tab eventKey="state" title="Statewide">
                       <div className="mt-2">
-                        <Tabs onSelect={(key, evnt) => {this.updateMenu(key, this.state.state_menu[key])}} defaultActiveKey="active" id="total_daily" variant='pills'>
-                          <Tab eventKey="active" title="Active">
+                        <Tabs defaultActiveKey="metrics" id="state_data_category" variant='pills'>
+                          <Tab eventKey="metrics" title="Metrics">
                             <div className="mt-2">
-                              <Tab.Container id="active_selection" defaultActiveKey="active_cases">
-                                <ListGroup>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("active", "active_cases")}} eventKey="active_cases">Current Active Cases</ListGroup.Item>
-                                </ListGroup>
-                              </Tab.Container>
-                            </div>
-                          </Tab>
-                            <Tab eventKey="total" title="Total">
-                              <div className="mt-2">
-                                <Tab.Container id="total_selection" defaultActiveKey="total_cases">
-                                  <ListGroup>
-                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_cases")}} eventKey="total_cases">Cases</ListGroup.Item>
-                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_deaths")}} eventKey="total_deaths">Deaths</ListGroup.Item>
-                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_recoveries")}} eventKey="total_recoveries">Recoveries</ListGroup.Item>
-                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_hospitalized")}} eventKey="total_hospitalized">Hospitalizations</ListGroup.Item>
-                                  </ListGroup>
-                                </Tab.Container>
-                              </div>
-                            </Tab>
-                          <Tab eventKey="daily" title="Daily">
-                            <div className="mt-2">
-                              <Tab.Container id="daily_selection" defaultActiveKey="daily_cases">
-                                <ListGroup>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases")}} eventKey="daily_cases">Cases</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases_specimen")}} eventKey="daily_cases_specimen">Cases (Specimen Collection Date)</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_deaths")}} eventKey="daily_deaths">Deaths</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_active")}} eventKey="daily_active">Active</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_recoveries")}} eventKey="daily_recoveries">Recoveries</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_hospitalized")}} eventKey="daily_hospitalized">Hospitalizations</ListGroup.Item>
-                                </ListGroup>
-                              </Tab.Container>
-                            </div>
-                          </Tab>
-                          <Tab eventKey="testing" title="Testing">
-                            <div className="mt-2">
-                              <Tab.Container id="testing_selection" defaultActiveKey="testing">
-                                <ListGroup>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("testing", "testing")}} eventKey="testing">Testing Data</ListGroup.Item>
+                              <Tab.Container id="state_metric_list" defaultActiveKey="active">
+                                <ListGroup onSelect={(key, evnt) => {this.updateMenu("state_menu", key)}}>
+                                  <ListGroup.Item action eventKey="active">Active Cases</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="cases">Case Counts</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="cases_specimen">Case Counts (Specimen Collection Date)</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="deaths">Deaths</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="hospitalizations">Hospitalizations</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="recovered">Recovered Cases</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="testing">Testing</ListGroup.Item>
                                 </ListGroup>
                               </Tab.Container>
                             </div>
@@ -321,49 +257,20 @@ class TNCovid extends React.Component {
                         </Tabs>
                       </div>
                     </Tab>
-                    <Tab eventKey="county" title="County level">
+                    <Tab eventKey="county" title="County Data">
                       <div className="mt-2">
-                        <Tabs onSelect={(key, evnt) => {this.updateMenu(key, this.state.menu[key])}} defaultActiveKey="active" id="total_daily" variant='pills'>
-                          <Tab eventKey="active" title="Active">
+                        <Tabs defaultActiveKey="metrics" id="county_data_category" variant='pills'>
+                          <Tab eventKey="metrics" title="Metrics">
                             <div className="mt-2">
-                              <Tab.Container id="active_selection" defaultActiveKey="active_cases">
-                                <ListGroup>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("active", "active_cases")}} eventKey="active_cases">Current Active Cases</ListGroup.Item>
-                                </ListGroup>
-                              </Tab.Container>
-                            </div>
-                          </Tab>
-                            <Tab eventKey="total" title="Total">
-                              <div className="mt-2">
-                                <Tab.Container id="total_selection" defaultActiveKey="total_cases">
-                                  <ListGroup>
-                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_cases")}} eventKey="total_cases">Cases</ListGroup.Item>
-                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_deaths")}} eventKey="total_deaths">Deaths</ListGroup.Item>
-                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_recoveries")}} eventKey="total_recoveries">Recoveries</ListGroup.Item>
-                                    <ListGroup.Item action onClick={() => {this.updateMenu("total", "total_hospitalized")}} eventKey="total_hospitalized">Hospitalizations</ListGroup.Item>
-                                  </ListGroup>
-                                </Tab.Container>
-                              </div>
-                            </Tab>
-                          <Tab eventKey="daily" title="Daily">
-                            <div className="mt-2">
-                              <Tab.Container id="daily_selection" defaultActiveKey="daily_cases">
-                                <ListGroup>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases")}} eventKey="daily_cases">Cases</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_cases_specimen")}} eventKey="daily_cases_specimen">Cases (Specimen Collection Date)</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_deaths")}} eventKey="daily_deaths">Deaths</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_active")}} eventKey="daily_active">Active</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_recoveries")}} eventKey="daily_recoveries">Recoveries</ListGroup.Item>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("daily", "daily_hospitalized")}} eventKey="daily_hospitalized">Hospitalizations</ListGroup.Item>
-                                </ListGroup>
-                              </Tab.Container>
-                            </div>
-                          </Tab>
-                          <Tab eventKey="testing" title="Testing">
-                            <div className="mt-2">
-                              <Tab.Container id="testing_selection" defaultActiveKey="testing">
-                                <ListGroup>
-                                  <ListGroup.Item action onClick={() => {this.updateMenu("testing", "testing")}} eventKey="testing">Testing Data</ListGroup.Item>
+                              <Tab.Container id="county_metric_list" defaultActiveKey="active">
+                                <ListGroup onSelect={(key, evnt) => {this.updateMenu("county_menu", key)}}>
+                                  <ListGroup.Item action eventKey="active">Active Cases</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="cases">Case Counts</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="cases_specimen">Case Counts (Specimen Collection Date)</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="deaths">Deaths</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="hospitalizations">Hospitalizations</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="recovered">Recovered Cases</ListGroup.Item>
+                                  <ListGroup.Item action eventKey="testing">Testing</ListGroup.Item>
                                 </ListGroup>
                               </Tab.Container>
                             </div>
@@ -375,11 +282,14 @@ class TNCovid extends React.Component {
                 </div>
               </Col>
               <Col xl={8}>
+                <Alert variant={'info'}>
+                  Hover text may persist between plot and map changes
+                </Alert>
                 <div className="ml-3 mr-3">
                   <Row className="justify-content-center">
                     <div style={{width: "100%", height: "100%"}}>
                       <Card>
-                        <Card.Header>{this.state.mapTitle}</Card.Header>
+                        <Card.Header>Map</Card.Header>
                         <Card.Body>
                           <div className="mb-4">
                             <AbstractMap selected={this.selected()} onClick={(obj) => this.handleMapClick(obj)} zoom={this.state.zoom}/>
@@ -392,7 +302,7 @@ class TNCovid extends React.Component {
                   <Row className="justify-content-center">
                     <div style={{width: "100%", height: "100%"}}>
                       <Card>
-                        <Card.Header>{this.state.graphTitle}</Card.Header>
+                        <Card.Header>{this.state.title}</Card.Header>
                         <Card.Body>
                           <AbstractPlot selected={this.selected()} />
                         </Card.Body>
@@ -406,7 +316,7 @@ class TNCovid extends React.Component {
           <div className="mt-3">
             <Container fluid>
               <Row className="justify-content-center">
-                <span> Source: <a href="https://www.tn.gov/health/cedep/ncov.html"> Tennessee Department of Health</a> </span>
+                <span>Source: <a href="https://www.tn.gov/health/cedep/ncov.html">Tennessee Department of Health</a></span>
               </Row>
               <Row className="justify-content-center">
                 {"Last updated: " + DateString['date']}

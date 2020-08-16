@@ -1,3 +1,209 @@
+export function dailyTotalPlot(pObj) {
+  let data = [
+    {
+      x: pObj.daily.xval,
+      y: pObj.daily.yval,
+      type: 'bar',
+      mode: 'lines+markers',
+      marker: {
+        color: pObj.daily.barcolor
+      },
+      hoverinfo: 'x+y',
+      visible: true,
+    },
+    {
+      x: pObj.daily.xval,
+      y: pObj.daily.movingAverage,
+      type: 'scatter',
+      mode: 'lines',
+      fill: 'tozeroy',
+      fillcolor: pObj.daily.fillcolor,
+      line: {
+        color: pObj.daily.movingLineColor
+      },
+      hoverinfo: 'skip',
+      visible: true,
+    },
+    {
+      x: pObj.total.xval,
+      y: pObj.total.yval,
+      type: 'scatter',
+      mode: 'lines+markers',
+      line: {
+        color: pObj.total.linecolor
+      },
+      hoverinfo: 'x+y',
+      visible: false,
+    }];
+
+  let updatemenus = [
+    {
+      buttons: [
+        {
+          args: [{'visible': [true, true, false]}],
+          label: 'Daily',
+          method: 'update'
+        },
+        {
+          args: [{'visible': [false, false, true]}],
+          label: 'Total',
+          method: 'update'
+        }
+      ],
+      direction: 'left',
+      showactive: 'true',
+      type: 'buttons',
+      x: 0.5,
+      y: 1.2
+    }
+  ];
+
+  let layout = {
+    updatemenus: updatemenus,
+    xaxis: {
+      title: pObj.xtitle,
+    },
+    showlegend: false,
+    margin: {
+      l: 35,
+      r: 0,
+      t: 35,
+      pad: 2
+    },
+    autosize: true,
+    dragmode: 'pan',
+    shapes: pObj.shapes
+  };
+
+  return {
+    data: data,
+    layout: layout,
+    config: {
+      displaylogo: false,
+      responsive: false,
+      toImageButtonOptions: {
+        format: 'png',
+        filename: 'plot',
+        scale: 2
+      },
+      modeBarButtonsToRemove: [
+        'hoverClosestCartesian',
+        'hoverCompareCartesian',
+        'select2d',
+        'pan2d',
+        'lasso2d',
+        'autoScale2d',
+        'toggleSpikelines',
+        'zoom2d',
+        'resetScale2d'
+      ]
+    }
+  };
+}
+
+export function totalDailyPlot(pObj) {
+  let data = [
+    {
+      x: pObj.total.xval,
+      y: pObj.total.yval,
+      type: 'scatter',
+      mode: 'lines+markers',
+      line: {
+        color: pObj.total.linecolor
+      },
+      hoverinfo: 'x+y',
+      visible: true,
+    },
+    {
+      x: pObj.daily.xval,
+      y: pObj.daily.yval,
+      type: 'bar',
+      mode: 'lines+markers',
+      marker: {
+        color: pObj.daily.barcolor
+      },
+      hoverinfo: 'x+y',
+      visible: false,
+    },
+    {
+      x: pObj.daily.xval,
+      y: pObj.daily.movingAverage,
+      type: 'scatter',
+      mode: 'lines',
+      fill: 'tozeroy',
+      fillcolor: pObj.daily.fillcolor,
+      line: {
+        color: pObj.daily.movingLineColor
+      },
+      hoverinfo: 'skip',
+      visible: false,
+    },];
+
+  let updatemenus = [
+    {
+      buttons: [
+        {
+          args: [{'visible': [true, false, false]}],
+          label: 'Active',
+          method: 'update'
+        },
+        {
+          args: [{'visible': [false, true, true]}],
+          label: 'Daily',
+          method: 'update'
+        }
+      ],
+      direction: 'left',
+      showactive: 'true',
+      type: 'buttons',
+      x: 0.5,
+      y: 1.2
+    }
+  ];
+
+  let layout = {
+    updatemenus: updatemenus,
+    xaxis: {
+      title: pObj.xtitle,
+    },
+    showlegend: false,
+    margin: {
+      l: 35,
+      r: 0,
+      t: 35,
+      pad: 2
+    },
+    autosize: true,
+    dragmode: 'pan',
+    shapes: pObj.shapes
+  };
+
+  return {
+    data: data,
+    layout: layout,
+    config: {
+      displaylogo: false,
+      responsive: false,
+      toImageButtonOptions: {
+        format: 'png',
+        filename: 'plot',
+        scale: 2
+      },
+      modeBarButtonsToRemove: [
+        'hoverClosestCartesian',
+        'hoverCompareCartesian',
+        'select2d',
+        'pan2d',
+        'lasso2d',
+        'autoScale2d',
+        'toggleSpikelines',
+        'zoom2d',
+        'resetScale2d'
+      ]
+    }
+  };
+}
+
 export function dailySpecimenPlot(pObj) {
   let fourteenDayBegin = pObj.xval[(pObj.xval.length - 10)];
   let fourteenDayEnd = pObj.xval[(pObj.xval.length - 1)];
@@ -29,10 +235,7 @@ export function dailySpecimenPlot(pObj) {
 
   let layout = {
     xaxis: {
-      title: "Date",
-    },
-    yaxis: {
-      title: pObj.ytitle,
+      title: "Specimen Collection Date",
     },
     showlegend: false,
     margin: {
