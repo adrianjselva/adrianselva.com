@@ -16,7 +16,7 @@ class AbstractMap extends React.Component {
   constructor(props) {
     super(props)
 
-    let mapObject = this.mapObject(StateMapData["active_cases"]);
+    let mapObject = this.mapObject(StateMapData["active"]);
 
     this.state = {
       data: mapObject.data,
@@ -26,14 +26,14 @@ class AbstractMap extends React.Component {
 
   componentWillReceiveProps(next) {
     if(next.selected.view == 'county') {
-      let mapObject = this.mapObject(CountyMapData[next.selected.county_metric]);
+      let mapObject = this.mapObject(CountyMapData[next.selected.county_data]);
 
       this.setState({
         data: mapObject.data,
         layout: mapObject.layout
       });
     } else if(next.selected.view == 'state') {
-      let mapObject = this.mapObject(StateMapData[next.selected.state_metric]);
+      let mapObject = this.mapObject(StateMapData[next.selected.state_data]);
 
       this.setState({
         data: mapObject.data,

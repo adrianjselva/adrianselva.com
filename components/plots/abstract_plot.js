@@ -15,7 +15,7 @@ class AbstractPlot extends React.Component {
   constructor(props) {
     super(props)
 
-    let pObj = this.plotObject(StateData["active_cases"])
+    let pObj = plots.totalDailyPlot(StateData.active)
 
     this.state = {
       data: pObj.data,
@@ -35,7 +35,7 @@ class AbstractPlot extends React.Component {
           config: selectPlot.config
         });
       } else {
-        let countyPlot = this.plotObject(CountyData[next.selected.county][next.selected.county_metric]);
+        let countyPlot = this.plotObject(CountyData[next.selected.county][next.selected.county_data]);
 
         this.setState({
           data: countyPlot.data,
@@ -44,7 +44,7 @@ class AbstractPlot extends React.Component {
         });
       }
     } else if(next.selected.view == "state") {
-      let statePlot = this.plotObject(StateData[next.selected.state_metric]);
+      let statePlot = this.plotObject(StateData[next.selected.state_data]);
 
       this.setState({
         data: statePlot.data,
@@ -66,15 +66,19 @@ class AbstractPlot extends React.Component {
         return plots.select();
       case "specimen":
         return plots.dailySpecimenPlot(pObj);
+      case "daily_total":
+        return plots.dailyTotalPlot(pObj);
+      case "total_daily":
+        return plots.totalDailyPlot(pObj);
     }
   }
 
   shouldShowDisclaimer() {
     return(
-      (this.props.selected.county_metric == "daily_cases_specimen" &&
+      (this.props.selected.county_data == "cases_specimen" &&
        this.props.selected.view == "county" && this.props.selected.county != "")
         ||
-      (this.props.selected.state_metric == "daily_cases_specimen" && this.props.selected.view == "state")
+      (this.props.selected.state_data == "cases_specimen" && this.props.selected.view == "state")
     );
   }
 
@@ -88,7 +92,7 @@ class AbstractPlot extends React.Component {
     }
 
     return(
-      <Row>
+      <div>
         <Plot
           data={this.state.data}
           layout={this.state.layout}
@@ -96,8 +100,8 @@ class AbstractPlot extends React.Component {
           useResizeHandler={true}
           style={{width: "100%", height: "100%"}}
         />
-        <span>{disclaimer}</span>
-      </Row>
+        <p style={{textAlign: 'center'}}>{disclaimer}</p>
+      </div>
     );
   }
 }
