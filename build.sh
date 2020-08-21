@@ -3,7 +3,7 @@
 RSCRIPT_PATH="/Users/adrianjselva/Covid-19 Data/TDOH Data/"
 RSCRIPT_FILE="tdoh_datasets.R"
 
-SITE_PATH="/Users/adrianjselva/Projects/aselva.org/master"
+SITE_PATH="/Users/adrianjselva/Projects/aselva.org/"
 
 cd "$RSCRIPT_PATH"
 Rscript $RSCRIPT_FILE

@@ -14,6 +14,7 @@ import Dropdown from 'react-bootstrap/Dropdown'
 import Tabs from 'react-bootstrap/Tabs'
 import Spinner from 'react-bootstrap/Spinner'
 import Alert from 'react-bootstrap/Alert'
+import Accordion from 'react-bootstrap/Accordion'
 
 import Titles from '../assets/titles.json'
 
@@ -58,6 +59,7 @@ class TNCovid extends React.Component {
       title: Titles.state.active,
       county_menu: {
         metrics: 'active',
+        demographic: 'school_age'
       },
       state_menu: {
         metrics: 'active',
@@ -242,7 +244,7 @@ class TNCovid extends React.Component {
                           <Tab eventKey="metrics" title="Metrics">
                             <div className="mt-2">
                               <Tab.Container id="state_metric_list" defaultActiveKey="active">
-                                <ListGroup onSelect={(key, evnt) => {this.updateMenu("state_menu", key)}}>
+                                <ListGroup onSelect={(key, evnt) => {this.updateMenu("metrics", key)}}>
                                   <ListGroup.Item action eventKey="active">Active Cases</ListGroup.Item>
                                   <ListGroup.Item action eventKey="cases">Case Counts</ListGroup.Item>
                                   <ListGroup.Item action eventKey="cases_specimen">Case Counts (Specimen Collection Date)</ListGroup.Item>
@@ -259,11 +261,11 @@ class TNCovid extends React.Component {
                     </Tab>
                     <Tab eventKey="county" title="County Data">
                       <div className="mt-2">
-                        <Tabs defaultActiveKey="metrics" id="county_data_category" variant='pills'>
+                        <Tabs onSelect={(key, evnt) => {this.updateMenu(key, this.state.county_menu[key])}} defaultActiveKey="metrics" id="county_data_category" variant='pills'>
                           <Tab eventKey="metrics" title="Metrics">
                             <div className="mt-2">
                               <Tab.Container id="county_metric_list" defaultActiveKey="active">
-                                <ListGroup onSelect={(key, evnt) => {this.updateMenu("county_menu", key)}}>
+                                <ListGroup onSelect={(key, evnt) => {this.updateMenu("metrics", key)}}>
                                   <ListGroup.Item action eventKey="active">Active Cases</ListGroup.Item>
                                   <ListGroup.Item action eventKey="cases">Case Counts</ListGroup.Item>
                                   <ListGroup.Item action eventKey="cases_specimen">Case Counts (Specimen Collection Date)</ListGroup.Item>
@@ -271,6 +273,15 @@ class TNCovid extends React.Component {
                                   <ListGroup.Item action eventKey="hospitalizations">Hospitalizations</ListGroup.Item>
                                   <ListGroup.Item action eventKey="recovered">Recovered Cases</ListGroup.Item>
                                   <ListGroup.Item action eventKey="testing">Testing</ListGroup.Item>
+                                </ListGroup>
+                              </Tab.Container>
+                            </div>
+                          </Tab>
+                          <Tab eventKey="demographic" title="Demographic Data">
+                            <div className="mt-2">
+                              <Tab.Container id="county_demographic_list" defaultActiveKey="school_age">
+                                <ListGroup onSelect={(key, evnt) => {this.updateMenu("demographic", key)}}>
+                                  <ListGroup.Item action eventKey="school_age">School-aged Cases</ListGroup.Item>
                                 </ListGroup>
                               </Tab.Container>
                             </div>
