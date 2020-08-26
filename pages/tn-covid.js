@@ -277,15 +277,6 @@ class TNCovid extends React.Component {
                               </Tab.Container>
                             </div>
                           </Tab>
-                          <Tab eventKey="demographic" title="Demographic Data">
-                            <div className="mt-2">
-                              <Tab.Container id="county_demographic_list" defaultActiveKey="school_age">
-                                <ListGroup onSelect={(key, evnt) => {this.updateMenu("demographic", key)}}>
-                                  <ListGroup.Item action eventKey="school_age">School-aged Cases</ListGroup.Item>
-                                </ListGroup>
-                              </Tab.Container>
-                            </div>
-                          </Tab>
                         </Tabs>
                       </div>
                     </Tab>
