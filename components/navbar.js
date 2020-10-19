@@ -12,7 +12,6 @@ class Navigation extends React.Component {
                         <Nav.Link href='/'>Home</Nav.Link>
                         <Nav.Link>Projects</Nav.Link>
                         <Nav.Link href='/tn-covid'>TN COVID-19 Data</Nav.Link>
-                        <Nav.Link>About</Nav.Link>
                     </Nav>
                 </Navbar.Collapse>
             </Navbar>
