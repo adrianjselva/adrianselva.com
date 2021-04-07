@@ -10,7 +10,7 @@ class Footer extends React.Component {
                         <Nav.Link href="http://github.com/adrianjselva">Github</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
-                        <Nav.Link href="http://twitter.com/AdrianSelva_">Twitter</Nav.Link>
+                        <Nav.Link href="https://www.linkedin.com/in/adrian-selva-a72298176/">LinkedIn</Nav.Link>
                 </Nav.Item>
                 <Nav.Item>
                         <Nav.Link href="mailto:selva.a@northeastern.edu">Email</Nav.Link>
