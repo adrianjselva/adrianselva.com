@@ -1,8 +1,9 @@
 import Head from 'next/head'
-import { initGA, logPageView } from "./googleAnalytics"
+//import { initGA, logPageView } from "./googleAnalytics"
 
 import Navigation from './navbar'
 import Footer from './footer'
+import React from 'react';
 
 class Layout extends React.Component {
   constructor(props) {
@@ -10,11 +11,11 @@ class Layout extends React.Component {
   }
 
   componentDidMount() {
-    if (!window.GA_INITIALIZED) {
-      initGA()
-      window.GA_INITIALIZED = true
-    }
-    logPageView()
+    //if (!window.GA_INITIALIZED) {
+      //initGA()
+      //window.GA_INITIALIZED = true
+    //}
+    //logPageView()
   }
 
   render() {
